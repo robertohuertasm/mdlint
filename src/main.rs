@@ -27,7 +27,7 @@ fn main() {
 fn find_headings<'a>(nodes: &[&'a AstNode<'a>]) -> Vec<&'a AstNode<'a>> {
     nodes
         .iter()
-        .filter(|&x| is_heading(&x.data.borrow_mut().value))
+        .filter(|x| is_heading(&x.data.borrow_mut().value))
         .map(|&x| x)
         .collect::<Vec<&AstNode>>()
 }
