@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 extern crate comrak;
 extern crate typed_arena;
-use comrak::nodes::{AstNode, NodeValue,};
+use comrak::nodes::{AstNode, NodeValue};
 use comrak::{parse_document, ComrakOptions};
 use typed_arena::Arena;
 
@@ -19,12 +19,17 @@ fn main() {
     // check_first_child(&root);
     // check_second_child(&v[0]);
     let headers = find_headings(&v);
-    headers.into_iter().for_each(|x| println!("{:?}", x.data.borrow_mut()));
+    headers
+        .into_iter()
+        .for_each(|x| println!("{:?}", x.data.borrow_mut()));
 }
 
-fn find_headings<'a>(nodes: &Vec<&'a AstNode<'a>>)->  Vec<&'a AstNode<'a>> {
-    let headers: Vec<&AstNode> = nodes.into_iter().filter(|x| is_heading(&x.data.borrow_mut().value)).map(|x| *x).collect();
-    headers
+fn find_headings<'a>(nodes: &[&'a AstNode<'a>]) -> Vec<&'a AstNode<'a>> {
+    nodes
+        .iter()
+        .filter(|&x| is_heading(&x.data.borrow_mut().value))
+        .map(|&x| x)
+        .collect::<Vec<&AstNode>>()
 }
 
 fn is_heading(node: &NodeValue) -> bool {
@@ -57,7 +62,6 @@ fn extract_content(node: &AstNode) -> String {
     let st = node.data.borrow_mut().content.to_vec();
     String::from_utf8(st).expect("Something went wrong while transforming content to string")
 }
-
 
 fn use_cmark() {
     let arena = Arena::new();
