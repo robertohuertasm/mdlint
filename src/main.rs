@@ -18,16 +18,20 @@ fn main() {
     let v: Vec<&AstNode> = root.children().collect();
     // check_first_child(&root);
     // check_second_child(&v[0]);
-    let headers = find_headers(&v);
+    let headers = find_headings(&v);
     headers.into_iter().for_each(|x| println!("{:?}", x.data.borrow_mut()));
 }
 
-fn find_headers<'a>(nodes: &Vec<&'a AstNode<'a>>)->  Vec<&'a AstNode<'a>> {
-    let headers: Vec<&AstNode> = nodes.into_iter().filter(|x| match x.data.borrow_mut().value {
+fn find_headings<'a>(nodes: &Vec<&'a AstNode<'a>>)->  Vec<&'a AstNode<'a>> {
+    let headers: Vec<&AstNode> = nodes.into_iter().filter(|x| is_heading(&x.data.borrow_mut().value)).map(|x| *x).collect();
+    headers
+}
+
+fn is_heading(node: &NodeValue) -> bool {
+    match node {
         NodeValue::Heading(_) => true,
         _ => false,
-    }).map(|x| *x).collect();
-    headers
+    }
 }
 
 fn read_file(file_path: &str) -> Result<String, std::io::Error> {
