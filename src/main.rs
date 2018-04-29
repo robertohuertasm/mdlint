@@ -1,14 +1,13 @@
 #![allow(dead_code)]
 extern crate comrak;
 extern crate typed_arena;
-use comrak::nodes::{AstNode, NodeValue, Ast};
+use comrak::nodes::{AstNode, NodeValue,};
 use comrak::{parse_document, ComrakOptions};
 use typed_arena::Arena;
 
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-use std::cell::RefCell;
 
 fn main() {
     let file = "data/test1.md";
@@ -16,9 +15,19 @@ fn main() {
     // println!("{}", text);
     let arena = Arena::new();
     let root = parse_document(&arena, &text, &ComrakOptions::default());
-    let v: Vec<_> = root.children().collect();
-    check_first_child(&root);
-    check_second_child(&v[0].data)
+    let v: Vec<&AstNode> = root.children().collect();
+    // check_first_child(&root);
+    // check_second_child(&v[0]);
+    let headers = find_headers(&v);
+    headers.into_iter().for_each(|x| println!("{:?}", x.data.borrow_mut()));
+}
+
+fn find_headers<'a>(nodes: &Vec<&'a AstNode<'a>>)->  Vec<&'a AstNode<'a>> {
+    let headers: Vec<&AstNode> = nodes.into_iter().filter(|x| match x.data.borrow_mut().value {
+        NodeValue::Heading(_) => true,
+        _ => false,
+    }).map(|x| *x).collect();
+    headers
 }
 
 fn read_file(file_path: &str) -> Result<String, std::io::Error> {
@@ -35,13 +44,13 @@ fn check_first_child(node: &AstNode) {
     println!("{:?}", fc.data.borrow_mut());
 }
 
-fn check_second_child(node: &RefCell<Ast>) {
+fn check_second_child(node: &AstNode) {
     println!("{}", extract_content(&node));
-    println!("{:?}", node);
+    println!("{:?}", node.data.borrow_mut());
 }
 
-fn extract_content(node: &RefCell<Ast>) -> String {
-    let st = node.borrow_mut().content.to_vec();
+fn extract_content(node: &AstNode) -> String {
+    let st = node.data.borrow_mut().content.to_vec();
     String::from_utf8(st).expect("Something went wrong while transforming content to string")
 }
 
