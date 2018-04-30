@@ -15,6 +15,16 @@ fn main() {
     // println!("{}", text);
     let arena = Arena::new();
     let root = parse_document(&arena, &text, &ComrakOptions::default());
+    let ch = root.children();
+    let headings = f(ch);
+    headings.into_iter()
+    .for_each(|x| println!("{:?}", x.data.borrow_mut()));
+
+    // let vv = root.children().nth(1).unwrap();
+    // check_second_child(&vv);
+    // let vv2 = root.children().nth(0).unwrap();
+    // check_second_child(&vv2);
+
     let v: Vec<&AstNode> = root.children().collect();
     // check_first_child(&root);
     // check_second_child(&v[0]);
@@ -24,17 +34,25 @@ fn main() {
         .for_each(|x| println!("{:?}", x.data.borrow_mut()));
 }
 
+fn f<'a, T>(i: T) -> Vec<&'a AstNode<'a>>
+where
+    T: Iterator<Item = &'a AstNode<'a>>,
+{
+    i.filter(|x| is_heading(&x.data.borrow_mut().value))
+        .collect::<Vec<&AstNode>>()
+}
+
 fn find_headings<'a>(nodes: &[&'a AstNode<'a>]) -> Vec<&'a AstNode<'a>> {
     nodes
         .iter()
+        .cloned()
         .filter(|x| is_heading(&x.data.borrow_mut().value))
-        .map(|&x| x)
         .collect::<Vec<&AstNode>>()
 }
 
 fn is_heading(node: &NodeValue) -> bool {
     match node {
-        NodeValue::Heading(_) => true,
+        &NodeValue::Heading(_) => true,
         _ => false,
     }
 }
