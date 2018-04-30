@@ -15,8 +15,8 @@ fn main() {
     // println!("{}", text);
     let arena = Arena::new();
     let root = parse_document(&arena, &text, &ComrakOptions::default());
-    let ch = root.children();
-    let headings = f(ch);
+
+    let headings = f(root.children());
     headings.into_iter()
     .for_each(|x| println!("{:?}", x.data.borrow_mut()));
 
@@ -25,15 +25,16 @@ fn main() {
     // let vv2 = root.children().nth(0).unwrap();
     // check_second_child(&vv2);
 
-    let v: Vec<&AstNode> = root.children().collect();
+    // let v: Vec<&AstNode> = root.children().collect();
     // check_first_child(&root);
     // check_second_child(&v[0]);
-    let headers = find_headings(&v);
-    headers
-        .into_iter()
-        .for_each(|x| println!("{:?}", x.data.borrow_mut()));
+    // let headers = find_headings(&v);
+    // headers
+    //     .into_iter()
+    //     .for_each(|x| println!("{:?}", x.data.borrow_mut()));
 }
 
+// TODO: pass the is_heading function as a fn param
 fn f<'a, T>(i: T) -> Vec<&'a AstNode<'a>>
 where
     T: Iterator<Item = &'a AstNode<'a>>,
