@@ -16,7 +16,7 @@ fn main() {
     let arena = Arena::new();
     let root = parse_document(&arena, &text, &ComrakOptions::default());
 
-    let headings = f(root.children());
+    let headings = filter_nodes(root.children(), is_heading);
     headings.into_iter()
     .for_each(|x| println!("{:?}", x.data.borrow_mut()));
 
@@ -34,13 +34,24 @@ fn main() {
     //     .for_each(|x| println!("{:?}", x.data.borrow_mut()));
 }
 
-// TODO: pass the is_heading function as a fn param
+fn filter_nodes<'a, T>(node: T, filter_fn: fn(&NodeValue)-> bool) -> Vec<&'a AstNode<'a>>
+where
+    T: Iterator<Item = &'a AstNode<'a>>,
+{
+    node.filter(|x| filter_fn(&x.data.borrow_mut().value))
+        .collect::<Vec<&AstNode>>()
+}
+
 fn f<'a, T>(i: T) -> Vec<&'a AstNode<'a>>
 where
     T: Iterator<Item = &'a AstNode<'a>>,
 {
-    i.filter(|x| is_heading(&x.data.borrow_mut().value))
-        .collect::<Vec<&AstNode>>()
+    // i.filter(|x| is_heading(&x.data.borrow_mut().value))
+    //     .collect::<Vec<&AstNode>>()
+    filter_nodes(i, |x: &NodeValue| match x {
+        &NodeValue::Heading(_) => true,
+        _ => false,
+    })
 }
 
 fn find_headings<'a>(nodes: &[&'a AstNode<'a>]) -> Vec<&'a AstNode<'a>> {
