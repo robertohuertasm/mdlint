@@ -9,6 +9,8 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 
+mod rules;
+
 fn main() {
     let file = "data/test1.md";
     let text = read_file(file).expect(&format!("Failed to find file: {}", file));
