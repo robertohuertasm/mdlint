@@ -6,7 +6,5 @@ authors = ["Roberto Huertas <roberto.huertas@outlook.com>"]
 [dependencies]
 console = "0.6.1"
 quicli = "0.2.0"
-markdown = "0.2"
 comrak = "0.2.9"
 typed-arena = "1.3.0"
-prettify-cmark = "0.1.2"
