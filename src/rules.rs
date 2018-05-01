@@ -1,6 +1,6 @@
-use comrak::nodes::{AstNode};
+use comrak::nodes::AstNode;
 
-type CheckFn = fn (&AstNode) -> RuleInfo;
+type CheckFn = fn(&AstNode) -> RuleInfo;
 
 pub struct RuleInfo {
     pub description: String,
@@ -9,6 +9,7 @@ pub struct RuleInfo {
 
 pub struct RuleSet {
     pub rule_info: Vec<RuleInfo>,
+    pub rules: [Rule],
 }
 
 pub trait Check {

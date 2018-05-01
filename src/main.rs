@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 extern crate comrak;
 extern crate typed_arena;
+
 use comrak::nodes::{AstNode, NodeValue};
 use comrak::{parse_document, ComrakOptions};
 use typed_arena::Arena;
@@ -19,8 +20,9 @@ fn main() {
     let root = parse_document(&arena, &text, &ComrakOptions::default());
 
     let headings = filter_nodes(root.children(), is_heading);
-    headings.into_iter()
-    .for_each(|x| println!("{:?}", x.data.borrow_mut()));
+    headings
+        .into_iter()
+        .for_each(|x| println!("{:?}", x.data.borrow_mut()));
 
     // let vv = root.children().nth(1).unwrap();
     // check_second_child(&vv);
@@ -36,17 +38,17 @@ fn main() {
     //     .for_each(|x| println!("{:?}", x.data.borrow_mut()));
 }
 
-fn filter_nodes<'a, T>(node: T, filter_fn: fn(&NodeValue)-> bool) -> Vec<&'a AstNode<'a>>
-where
-    T: Iterator<Item = &'a AstNode<'a>>,
+fn filter_nodes<'a, T>(node: T, filter_fn: fn(&NodeValue) -> bool) -> Vec<&'a AstNode<'a>>
+    where
+        T: Iterator<Item=&'a AstNode<'a>>,
 {
     node.filter(|x| filter_fn(&x.data.borrow_mut().value))
         .collect::<Vec<&AstNode>>()
 }
 
 fn f<'a, T>(i: T) -> Vec<&'a AstNode<'a>>
-where
-    T: Iterator<Item = &'a AstNode<'a>>,
+    where
+        T: Iterator<Item=&'a AstNode<'a>>,
 {
     // i.filter(|x| is_heading(&x.data.borrow_mut().value))
     //     .collect::<Vec<&AstNode>>()
@@ -132,8 +134,8 @@ fn use_cmark2() {
     );
 
     fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
-    where
-        F: Fn(&'a AstNode<'a>),
+        where
+            F: Fn(&'a AstNode<'a>),
     {
         f(node);
         for c in node.children() {
