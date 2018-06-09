@@ -2,19 +2,6 @@ use comrak::nodes::AstNode;
 use ruleset::{RuleCheck, RuleResult};
 
 #[macro_export]
-macro_rules! vec2 {
-    ( $( $x:expr ),* ) => {
-        {
-            let mut temp_vec = Vec::new();
-            $(
-                temp_vec.push($x);
-            )*
-            temp_vec
-        }
-    };
-}
-
-#[macro_export]
 macro_rules! rule {
     ($name:ident : $value:expr) => {{
         pub struct $name {
@@ -69,7 +56,6 @@ impl Rule {
 impl RuleCheck for Rule {
     fn check(&self, _root: &AstNode) -> Option<RuleResult> {
         println!("Checking rule {}", self.description);
-        println!("{:?}", vec2![1, 2, 3, 4]);
         Some(RuleResult {
             description: self.description.clone(),
             info: "Info loca".to_string(),
