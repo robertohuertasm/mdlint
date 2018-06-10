@@ -10,6 +10,7 @@ pub struct RuleSet {
 pub struct RuleResult {
     pub description: String,
     pub info: String,
+    pub details: Option<Vec<RuleResultDetails>>,
 }
 
 impl RuleResult {
@@ -17,12 +18,24 @@ impl RuleResult {
         RuleResult {
             description: description.to_string(),
             info: info.to_string(),
+            details: Some(vec![RuleResultDetails::new(1,1)]),
         }
     }
 }
 
+pub struct RuleResultDetails {
+    pub line: i16,
+    pub column: i16,
+}
+
+impl RuleResultDetails {
+    pub fn new(line: i16, column: i16) -> Self {
+        RuleResultDetails { line, column }
+    }
+}
+
 pub trait RuleCheck {
-    fn check(&self, &AstNode) -> Option<RuleResult>;
+    fn check(&self, &AstNode) -> RuleResult;
 }
 
 impl RuleSet {
@@ -39,8 +52,7 @@ impl RuleSet {
         self.rules
             .iter()
             .map(|r| r.check(root))
-            .filter(|r| r.is_some())
-            .map(|r| r.unwrap())
+            .filter(|r| r.details.is_some())
             .collect()
     }
 }

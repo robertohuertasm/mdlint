@@ -9,7 +9,7 @@ macro_rules! rule {
         pub struct $name {}
 
         impl RuleCheck for $name {
-            fn check(&self, root: &AstNode) -> Option<RuleResult> {
+            fn check(&self, root: &AstNode) -> RuleResult {
                 println!("Starting check: {}", $desc);
                 $func($desc, root)
             }
