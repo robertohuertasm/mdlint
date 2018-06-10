@@ -1,7 +1,6 @@
-use parser;
 use comrak::nodes::AstNode;
+use parser;
 use typed_arena::Arena;
-
 
 pub struct RuleSet {
     pub name: String,

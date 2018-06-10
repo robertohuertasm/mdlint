@@ -8,8 +8,8 @@ use std::path::Path;
 
 pub fn get_ast<'a>(path: &str, arena: &'a Arena<AstNode<'a>>) -> &'a AstNode<'a> {
     let text = read_file(path).expect(&format!("Failed to find file: {}", path));
-     let root = parse_document(arena, &text, &ComrakOptions::default());
-     root
+    let root = parse_document(arena, &text, &ComrakOptions::default());
+    root
 }
 
 pub fn read_file(file_path: &str) -> Result<String, Error> {
@@ -33,4 +33,3 @@ pub fn is_heading(node: &NodeValue) -> bool {
         _ => false,
     }
 }
-
