@@ -13,6 +13,15 @@ pub struct RuleResult {
     pub info: String,
 }
 
+impl RuleResult {
+    pub fn new(description: &str, info: &str) -> Self {
+        RuleResult {
+            description: description.to_string(),
+            info: info.to_string(),
+        }
+    }
+}
+
 pub trait RuleCheck {
     fn check(&self, &AstNode) -> Option<RuleResult>;
 }

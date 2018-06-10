@@ -18,7 +18,7 @@ macro_rules! rule {
 
         impl RuleCheck for $name {
             fn check(&self, _root: &AstNode) -> Option<RuleResult> {
-                println!("Checking rule2 {}", self.description);
+                println!("Checking rule {}", self.description);
                 Some(RuleResult {
                     description: self.description.clone(),
                     info: "Info loca".to_string(),
@@ -26,6 +26,22 @@ macro_rules! rule {
             }
         }
         $name::new($value)
+    }};
+}
+
+#[macro_export]
+macro_rules! rule2 {
+    ($name:ident : $desc:expr; $func:expr) => {{
+        pub struct $name {}
+
+
+        impl RuleCheck for $name {
+            fn check(&self, root: &AstNode) -> Option<RuleResult> {
+                println!("Checking rule2 {}", $desc);
+                $func($desc, root)
+            }
+        }
+        $name{}
     }};
 }
 
@@ -39,6 +55,21 @@ pub fn get2() -> impl RuleCheck {
 
 pub fn get3() -> impl RuleCheck {
     Rule::new("from hand")
+}
+
+pub fn get4() -> impl RuleCheck {
+    rule2!{ Rule4: "from macro 4"; |desc: &str, root: &AstNode| {
+        println!("{}", desc);
+        Some(RuleResult::new(desc, "WTF!"))
+    }}
+}
+
+pub fn get5() -> impl RuleCheck {
+    fn f(desc: &str, root: &AstNode) -> Option<RuleResult> {
+        println!("{}", desc);
+        Some(RuleResult::new(desc, "WTF!"))
+    }
+    rule2!{ Rule4: "from macro 5"; f}
 }
 
 pub struct Rule {
@@ -58,7 +89,7 @@ impl RuleCheck for Rule {
         println!("Checking rule {}", self.description);
         Some(RuleResult {
             description: self.description.clone(),
-            info: "Info loca".to_string(),
+            info: "Info local".to_string(),
         })
     }
 }
