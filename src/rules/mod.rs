@@ -1,7 +1,7 @@
 use comrak::nodes::AstNode;
 use ruleset::{RuleCheck, RuleResult};
 
-pub mod checkers;
+mod checkers;
 
 #[macro_export]
 macro_rules! rule {

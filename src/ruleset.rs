@@ -1,7 +1,6 @@
 use comrak::nodes::AstNode;
 use parser;
 use typed_arena::Arena;
-use rules::checkers;
 
 pub trait RuleCheck {
     fn check<'a>(&self, &'a AstNode<'a>) -> RuleResult;
@@ -39,11 +38,11 @@ pub struct RuleResult {
 }
 
 impl RuleResult {
-    pub fn new(description: &str, info: &str) -> Self {
+    pub fn new(description: &str, info: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
         RuleResult {
             description: description.to_string(),
             info: info.to_string(),
-            details: Some(vec![RuleResultDetails::new(1, 1)]), //TODO: CHANGE THIS
+            details,
         }
     }
 }
@@ -57,14 +56,5 @@ pub struct RuleResultDetails {
 impl RuleResultDetails {
     pub fn new(line: i16, column: i16) -> Self {
         RuleResultDetails { line, column }
-    }
-}
-
-
-pub struct Rule {}
-
-impl RuleCheck for Rule {
-    fn check<'a>(&self, root: &'a AstNode<'a>) -> RuleResult {
-       checkers::check_md001(root)
     }
 }
