@@ -14,12 +14,12 @@ fn main() {
     };
 
     let result = rs.run("data/test1.md");
-    result.iter().for_each(|x| println!("{}", x.description));
+    result
+        .iter()
+        .for_each(|x| println!("result: {}", x.description));
 }
 
 fn get_rules() -> Vec<Box<RuleCheck>> {
-    let r4 = rules::get4();
-    let r5 = rules::get5();
-    let r6 = rules::get6();
-    vec![Box::new(r4), Box::new(r5), r6]
+    let r7 = rules::rule1::rule();
+    vec![r7]
 }
