@@ -1,6 +1,8 @@
 use comrak::nodes::AstNode;
 use ruleset::{RuleCheck, RuleResult};
 
+mod checkers;
+
 #[macro_export]
 macro_rules! rule {
     ($name:ident : $desc:expr; $func:expr) => {{
@@ -23,4 +25,6 @@ macro_rules! boxedrule {
     }};
 }
 
-pub mod rule1;
+pub fn rule() -> Box<impl RuleCheck> {
+    boxedrule!{ MD001: "Header levels should only increment by one level at a time"; checkers::check_md001}
+}

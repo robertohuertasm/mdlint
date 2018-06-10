@@ -30,6 +30,12 @@ impl RuleSet {
         let arena = Arena::new();
         let root = parser::get_ast(file_path, &arena);
 
+        // TODO: Use this to know the format of the returning nodes
+        let headings = parser::filter_nodes(root.children(), parser::is_heading);
+        headings
+            .into_iter()
+            .for_each(|x| println!("{:?}", x.data.borrow_mut()));
+
         self.rules
             .iter()
             .map(|r| r.check(root))

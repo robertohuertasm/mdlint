@@ -20,6 +20,6 @@ fn main() {
 }
 
 fn get_rules() -> Vec<Box<RuleCheck>> {
-    let r7 = rules::rule1::rule();
+    let r7 = rules::rule();
     vec![r7]
 }
