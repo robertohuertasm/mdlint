@@ -13,13 +13,14 @@ fn main() {
         rules: get_rules(),
     };
 
-    let result = rs.run("data/test1.md");
-    result
-        .iter()
-        .for_each(|x| println!("result: {}", x.description));
+    let result = rs.run("fixtures/md001/md001.ko.md");
+    // println!("{:?}", result);
+    result.iter().for_each(|ref x| {
+        let d = &x.details.as_ref().unwrap()[0];
+        println!("result: {:?} ::> {}", x.details, x.description);
+    });
 }
 
 fn get_rules() -> Vec<Box<RuleCheck>> {
-    let r7 = rules::rule();
-    vec![r7]
+    vec![rules::rule_md001()]
 }

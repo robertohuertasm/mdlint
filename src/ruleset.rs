@@ -17,10 +17,12 @@ impl RuleSet {
         let root = parser::get_ast(file_path, &arena);
 
         // TODO: Use this to know the format of the returning nodes
+        /*
         let headings = parser::filter_nodes(root.children(), parser::is_heading);
         headings
             .into_iter()
             .for_each(|x| println!("{:?}", x.data.borrow_mut()));
+        */
 
         self.rules
             .iter()
@@ -33,15 +35,13 @@ impl RuleSet {
 #[derive(Debug)]
 pub struct RuleResult {
     pub description: String,
-    pub info: String,
     pub details: Option<Vec<RuleResultDetails>>,
 }
 
 impl RuleResult {
-    pub fn new(description: &str, info: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
+    pub fn new(description: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
         RuleResult {
             description: description.to_string(),
-            info: info.to_string(),
             details,
         }
     }
@@ -49,12 +49,17 @@ impl RuleResult {
 
 #[derive(Debug)]
 pub struct RuleResultDetails {
-    pub line: i16,
-    pub column: i16,
+    pub line: u32,
+    pub column: usize,
+    pub content: String,
 }
 
 impl RuleResultDetails {
-    pub fn new(line: i16, column: i16) -> Self {
-        RuleResultDetails { line, column }
+    pub fn new(line: u32, column: usize, content: String) -> Self {
+        RuleResultDetails {
+            line,
+            column,
+            content,
+        }
     }
 }
