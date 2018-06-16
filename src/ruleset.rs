@@ -1,9 +1,12 @@
 use comrak::nodes::AstNode;
+use console::style;
+use emoji;
 use parser;
+use std::fmt;
 use typed_arena::Arena;
 
 pub trait RuleCheck {
-    fn check<'a>(&self, &'a AstNode<'a>) -> RuleResult;
+    fn check<'a>(&self, node: &'a AstNode<'a>) -> RuleResult;
 }
 
 pub struct RuleSet {
@@ -34,16 +37,39 @@ impl RuleSet {
 
 #[derive(Debug)]
 pub struct RuleResult {
+    pub name: String,
     pub description: String,
     pub details: Option<Vec<RuleResultDetails>>,
 }
 
 impl RuleResult {
-    pub fn new(description: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
+    pub fn new(name: &str, description: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
         RuleResult {
+            name: name.to_string(),
             description: description.to_string(),
             details,
         }
+    }
+
+    pub fn to_string(&self) -> String {
+        let mut final_str = format!(
+            "{}{}\r\n{}\r\n\r\n",
+            emoji::ERROR,
+            style(&self.name).bold().red(),
+            style(&self.description).underlined().yellow()
+        );
+        if let Some(ref details) = &self.details {
+            details.into_iter().for_each(|detail| {
+                final_str.push_str(&format!("   {}{}", emoji::INFO, &detail.to_string()));
+            });
+        }
+        final_str
+    }
+}
+
+impl fmt::Display for RuleResult {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
     }
 }
 
@@ -61,5 +87,18 @@ impl RuleResultDetails {
             column,
             content,
         }
+    }
+
+    pub fn to_string(&self) -> String {
+        format!(
+            "ln. {}, col. {}: '{}'",
+            self.line, self.column, self.content
+        )
+    }
+}
+
+impl fmt::Display for RuleResultDetails {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.to_string())
     }
 }

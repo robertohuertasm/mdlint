@@ -3,7 +3,6 @@ use parser::{content_to_string, filter_nodes, is_heading};
 use ruleset::{RuleResult, RuleResultDetails};
 
 pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
-    println!("evaluating MD001...");
     let headings = filter_nodes(root.children(), is_heading);
     let mut prev_level = 0;
     let mut details: Vec<RuleResultDetails> = Vec::new();
@@ -21,6 +20,7 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
         }
     });
     RuleResult::new(
+        "MD001",
         "Header levels should only increment by one level at a time",
         if details.len() > 0 {
             Some(details)

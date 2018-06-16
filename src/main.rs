@@ -1,6 +1,8 @@
 extern crate comrak;
+extern crate console;
 extern crate typed_arena;
 
+mod emoji;
 mod parser;
 mod rules;
 mod ruleset;
@@ -15,9 +17,8 @@ fn main() {
 
     let result = rs.run("fixtures/md001/md001.ko.md");
     // println!("{:?}", result);
-    result.iter().for_each(|ref x| {
-        let d = &x.details.as_ref().unwrap()[0];
-        println!("result: {:?} ::> {}", x.details, x.description);
+    result.into_iter().for_each(|x| {
+        println!("{}\r\n", x);
     });
 }
 
