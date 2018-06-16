@@ -1,27 +1,25 @@
-use comrak::nodes::{AstNode, NodeValue};
-use parser::{content_to_string, filter_nodes, is_heading};
+use comrak::nodes::{AstNode, Ast, NodeValue};
+use parser::{filter_nodes, is_heading};
 use ruleset::{RuleResult, RuleResultDetails};
 use rules::VecExt;
+use std::cell::Ref;
 
 pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let headings = filter_nodes(root.children(), is_heading);
     let mut prev_level = 0;
     let mut details: Vec<RuleResultDetails> = Vec::new();
-    headings.into_iter().map(|x| x.data.borrow()).for_each(|x| {
-        if let NodeValue::Heading(node) = x.value {
-            let current_level = node.level;
+    headings.into_iter().map(|x| x.data.borrow()).for_each(|node: Ref<Ast>| {
+        if let NodeValue::Heading(x) = node.value {
+            let current_level = x.level;
             if current_level > prev_level + 1 {
-                details.push(RuleResultDetails::new(
-                    x.start_line,
-                    x.start_column,
-                    content_to_string(x.content.to_vec()),
-                ));
+                details.push(RuleResultDetails::from_node(&node));
             }
             prev_level = current_level;
         }
     });
     RuleResult::new(
         "MD001",
+        "header-increment",
         "Header levels should only increment by one level at a time",
         details.to_option(),
     )
@@ -37,7 +35,7 @@ mod test {
     #[test]
     fn it_has_details_if_ko() {
         let arena = Arena::new();
-        let root = get_ast("fixtures/md001/md001.ko.md", &arena);
+        let root = get_ast("fixtures/md001/md001_ko.md", &arena);
         let result = check(root);
         assert!(result.details.is_some());
         let details = result.details.unwrap();
@@ -51,7 +49,15 @@ mod test {
     #[test]
     fn it_does_not_have_details_if_all_ok() {
         let arena = Arena::new();
-        let root = get_ast("fixtures/md001/md001.ok.md", &arena);
+        let root = get_ast("fixtures/md001/md001_ok.md", &arena);
+        let result = check(root);
+        assert!(result.details.is_none());
+    }
+
+    #[test]
+    fn it_does_not_have_details_if_no_headers() {
+        let arena = Arena::new();
+        let root = get_ast("fixtures/md001/md001_no_headings.md", &arena);
         let result = check(root);
         assert!(result.details.is_none());
     }

@@ -19,10 +19,10 @@ pub fn read_file(file_path: &str) -> Result<String, Error> {
     Ok(tokens)
 }
 
-pub fn extract_content(node: &AstNode) -> String {
-    let data = node.data.borrow().content.to_vec();
-    content_to_string(data)
-}
+// pub fn extract_content(node: &AstNode) -> String {
+//     let data = node.data.borrow().content.to_vec();
+//     content_to_string(data)
+// }
 
 pub fn content_to_string(content: Vec<u8>) -> String {
     String::from_utf8(content).expect("Something went wrong while transforming content to string")

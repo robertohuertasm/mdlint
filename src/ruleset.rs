@@ -1,8 +1,8 @@
-use comrak::nodes::AstNode;
+use comrak::nodes::{AstNode, Ast};
 use console::style;
 use emoji;
 use parser;
-use std::fmt;
+use std::{fmt, cell::Ref};
 use typed_arena::Arena;
 
 pub trait RuleCheck {
@@ -40,14 +40,16 @@ impl RuleSet {
 #[derive(Debug)]
 pub struct RuleResult {
     pub name: String,
+    pub alias: String,
     pub description: String,
     pub details: Option<Vec<RuleResultDetails>>,
 }
 
 impl RuleResult {
-    pub fn new(name: &str, description: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
+    pub fn new(name: &str, alias: &str, description: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
         RuleResult {
             name: name.to_string(),
+            alias: alias.to_string(),
             description: description.to_string(),
             details,
         }
@@ -55,9 +57,10 @@ impl RuleResult {
 
     pub fn to_string(&self) -> String {
         let mut final_str = format!(
-            "{}{}\r\n{}\r\n\r\n",
+            "{}{}/{}\r\n{}\r\n\r\n",
             emoji::ERROR,
             style(&self.name).bold().red(),
+            style(&self.alias).bold().red(),
             style(&self.description).underlined().yellow()
         );
         if let Some(ref details) = self.details {
@@ -89,6 +92,14 @@ impl RuleResultDetails {
             column,
             content,
         }
+    }
+
+    pub fn from_node(node: &Ref<Ast>) -> Self {
+        RuleResultDetails::new(
+            node.start_line,
+            node.start_column,
+            parser::content_to_string(node.content.to_vec())
+        )
     }
 
     pub fn to_string(&self) -> String {

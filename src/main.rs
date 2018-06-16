@@ -14,7 +14,7 @@ fn main() {
         rules: rules::get_rules(),
     };
 
-    let result = rs.run("fixtures/md001/md001.ko.md");
+    let result = rs.run("fixtures/md001/md001_ko.md");
     result.into_iter().for_each(|x| {
         println!("{}\r\n", x);
     });
