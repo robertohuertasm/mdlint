@@ -4,26 +4,27 @@ use ruleset::{RuleResult, RuleResultDetails};
 use rules::VecExt;
 
 pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
-    let headings = filter_nodes(root.children(), is_heading);
-    let mut prev_level = 0;
+    let first_heading = filter_nodes(root.children(), is_heading);
+    println!("{:?}", first_heading.first().data.borrow());
+
     let mut details: Vec<RuleResultDetails> = Vec::new();
-    headings.into_iter().map(|x| x.data.borrow()).for_each(|x| {
-        if let NodeValue::Heading(node) = x.value {
-            let current_level = node.level;
-            if current_level > prev_level + 1 {
-                details.push(RuleResultDetails::new(
-                    x.start_line,
-                    x.start_column,
-                    content_to_string(x.content.to_vec()),
-                ));
-            }
-            prev_level = current_level;
-        }
-    });
+    // headings.into_iter().map(|x| x.data.borrow()).for_each(|x| {
+    //     if let NodeValue::Heading(node) = x.value {
+    //         let current_level = node.level;
+    //         if current_level > prev_level + 1 {
+    //             details.push(RuleResultDetails::new(
+    //                 x.start_line,
+    //                 x.start_column,
+    //                 content_to_string(x.content.to_vec()),
+    //             ));
+    //         }
+    //         prev_level = current_level;
+    //     }
+    // });
     RuleResult::new(
-        "MD001",
-        "Header levels should only increment by one level at a time",
-        details.to_option(),
+        "MD002",
+        "First header should be a top level header",
+        details.to_option()
     )
 }
 

@@ -1,7 +1,8 @@
 use comrak::nodes::AstNode;
-use ruleset::{RuleCheck, RuleResult};
+use ruleset::{RuleCheck, RuleResult, RuleResultDetails};
 
 mod md001;
+mod md002;
 
 #[macro_export]
 macro_rules! rule {
@@ -24,6 +25,23 @@ macro_rules! boxedrule {
     }};
 }
 
-pub fn rule_md001() -> Box<impl RuleCheck> {
-    boxedrule!{ MD001: md001::check }
+pub trait VecExt {
+    fn to_option(self) -> Option<Vec<RuleResultDetails>>;
+}
+
+impl VecExt for Vec<RuleResultDetails> {
+    fn to_option(self) -> Option<Vec<RuleResultDetails>> {
+        if self.len() > 0 {
+            Some(self)
+        } else {
+            None
+        }
+    }
+}
+
+pub fn get_rules() -> Vec<Box<RuleCheck>> {
+    vec![
+        boxedrule!{ MD001: md001::check },
+        boxedrule!{ MD002: md002::check },
+    ]
 }
