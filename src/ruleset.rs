@@ -56,11 +56,11 @@ impl RuleResult {
     }
 
     pub fn to_string(&self) -> String {
+        let title = format!("{}/{}", self.name, self.alias);
         let mut final_str = format!(
-            "{}{}/{}\r\n{}\r\n\r\n",
+            "{}{}\r\n{}\r\n\r\n",
             emoji::ERROR,
-            style(&self.name).bold().red(),
-            style(&self.alias).bold().red(),
+            style(title).bold().red(),
             style(&self.description).underlined().yellow()
         );
         if let Some(ref details) = self.details {
