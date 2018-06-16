@@ -58,9 +58,9 @@ impl RuleResult {
             style(&self.name).bold().red(),
             style(&self.description).underlined().yellow()
         );
-        if let Some(ref details) = &self.details {
-            details.into_iter().for_each(|detail| {
-                final_str.push_str(&format!("   {}{}", emoji::INFO, &detail.to_string()));
+        if let Some(ref details) = self.details {
+            details.iter().for_each(|detail| {
+                final_str.push_str(&format!("{}   {}", emoji::INFO, detail.to_string()));
             });
         }
         final_str
