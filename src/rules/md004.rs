@@ -21,7 +21,7 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
                         details.push(RuleResultDetails::new(
                             node.start_line,
                             node.start_column,
-                            format!("Expected {}, found {}", li_type as char, x.bullet_char as char),
+                            format!("[Expected: {}; Actual: {}]", li_type as char, x.bullet_char as char),
                         ));
                     }
                 }
@@ -54,7 +54,7 @@ mod test {
         let first = &details[0];
         assert_eq!(first.line, 7);
         assert_eq!(first.column, 1);
-        assert_eq!(first.content, "Expected *, found -");
+        assert_eq!(first.content, "[Expected: *; Actual: -]");
     }
 
     #[test]
