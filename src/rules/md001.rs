@@ -1,22 +1,27 @@
-use comrak::nodes::{AstNode, Ast, NodeValue};
+use comrak::nodes::{Ast, AstNode, NodeValue};
 use parser::{filter_nodes, is_heading};
-use ruleset::{RuleResult, RuleResultDetails};
 use rules::extensions::VecExt;
+use ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
 pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
-    let headings = filter_nodes(root.children(), is_heading);
     let mut prev_level = 0;
     let mut details: Vec<RuleResultDetails> = Vec::new();
-    headings.into_iter().map(|x| x.data.borrow()).for_each(|node: Ref<Ast>| {
-        if let NodeValue::Heading(x) = node.value {
-            let current_level = x.level;
-            if current_level > prev_level + 1 {
-                details.push(RuleResultDetails::from_node(&node));
+    let headings = filter_nodes(root.children(), is_heading);
+
+    headings
+        .into_iter()
+        .map(|x| x.data.borrow())
+        .for_each(|node: Ref<Ast>| {
+            if let NodeValue::Heading(x) = node.value {
+                let current_level = x.level;
+                if current_level > prev_level + 1 {
+                    details.push(RuleResultDetails::from_node(&node));
+                }
+                prev_level = current_level;
             }
-            prev_level = current_level;
-        }
-    });
+        });
+
     RuleResult::new(
         "MD001",
         "header-increment",
@@ -57,7 +62,7 @@ mod test {
     #[test]
     fn it_does_not_have_details_if_no_headers() {
         let arena = Arena::new();
-        let root = get_ast("fixtures/md001/md001_no_headings.md", &arena);
+        let root = get_ast("fixtures/md001/md001_no_items.md", &arena);
         let result = check(root);
         assert!(result.details.is_none());
     }

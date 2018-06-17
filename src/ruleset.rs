@@ -58,14 +58,14 @@ impl RuleResult {
     pub fn to_string(&self) -> String {
         let title = format!("{}/{}", self.name, self.alias);
         let mut final_str = format!(
-            "{}{}\r\n{}\r\n\r\n",
+            "{}{}\r\n{}\r\n",
             emoji::ERROR,
             style(title).bold().red(),
             style(&self.description).underlined().yellow()
         );
         if let Some(ref details) = self.details {
             details.iter().for_each(|detail| {
-                final_str.push_str(&format!("{}{}", emoji::INFO, detail.to_string()));
+                final_str.push_str(&format!("\r\n{}{}", emoji::INFO, detail.to_string()));
             });
         }
         final_str

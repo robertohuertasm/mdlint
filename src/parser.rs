@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use comrak::nodes::{AstNode, ListType, NodeValue};
 use comrak::{parse_document, ComrakOptions};
 use typed_arena::Arena;
@@ -19,10 +21,10 @@ pub fn read_file(file_path: &str) -> Result<String, Error> {
     Ok(tokens)
 }
 
-// pub fn extract_content(node: &AstNode) -> String {
-//     let data = node.data.borrow().content.to_vec();
-//     content_to_string(data)
-// }
+pub fn extract_content(node: &AstNode) -> String {
+    let data = node.data.borrow().content.to_vec();
+    content_to_string(data)
+}
 
 pub fn content_to_string(content: Vec<u8>) -> String {
     String::from_utf8(content).expect("Something went wrong while transforming content to string")
@@ -46,6 +48,13 @@ pub fn is_heading(node: &NodeValue) -> bool {
 pub fn is_ul(node: &NodeValue) -> bool {
     match node {
         NodeValue::List(x) if x.list_type == ListType::Bullet => true,
+        _ => false,
+    }
+}
+
+pub fn is_ol(node: &NodeValue) -> bool {
+    match node {
+        NodeValue::List(x) if x.list_type == ListType::Ordered => true,
         _ => false,
     }
 }

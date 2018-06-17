@@ -1,27 +1,23 @@
-use comrak::nodes::{AstNode, Ast, NodeValue};
+use comrak::nodes::{Ast, AstNode, NodeValue};
 use parser::{filter_nodes, is_heading};
-use ruleset::{RuleResult, RuleResultDetails};
 use rules::extensions::VecExt;
+use ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
 // TODO: implement MD003
 pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
+
     if let Some(heading) = filter_nodes(root.children(), is_heading).first() {
         let node: Ref<Ast> = heading.data.borrow();
         if let NodeValue::Heading(x) = node.value {
-            if x.level !=1 {
+            if x.level != 1 {
                 details.push(RuleResultDetails::from_node(&node));
             }
         }
     }
 
-    RuleResult::new(
-        "MD003",
-        "header-style",
-        "Header style",
-        details.to_option()
-    )
+    RuleResult::new("MD003", "header-style", "Header style", details.to_option())
 }
 
 #[cfg(test)]
@@ -56,7 +52,7 @@ mod test {
     #[test]
     fn it_does_not_have_details_if_no_headers() {
         let arena = Arena::new();
-        let root = get_ast("fixtures/md003/md003_no_headings.md", &arena);
+        let root = get_ast("fixtures/md003/md003_no_items.md", &arena);
         let result = check(root);
         assert!(result.details.is_none());
     }
