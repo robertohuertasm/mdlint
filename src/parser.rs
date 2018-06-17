@@ -1,4 +1,4 @@
-use comrak::nodes::{AstNode, NodeValue};
+use comrak::nodes::{AstNode, ListType, NodeValue};
 use comrak::{parse_document, ComrakOptions};
 use typed_arena::Arena;
 
@@ -38,7 +38,14 @@ where
 
 pub fn is_heading(node: &NodeValue) -> bool {
     match node {
-        &NodeValue::Heading(_) => true,
+        NodeValue::Heading(_) => true,
+        _ => false,
+    }
+}
+
+pub fn is_ul(node: &NodeValue) -> bool {
+    match node {
+        NodeValue::List(x) if x.list_type == ListType::Bullet => true,
         _ => false,
     }
 }

@@ -1,7 +1,7 @@
 use comrak::nodes::{AstNode, Ast, NodeValue};
 use parser::{filter_nodes, is_heading};
 use ruleset::{RuleResult, RuleResultDetails};
-use rules::VecExt;
+use rules::extensions::VecExt;
 use std::cell::Ref;
 
 pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {

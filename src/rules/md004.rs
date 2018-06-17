@@ -1,27 +1,27 @@
 use comrak::nodes::{AstNode, Ast, NodeValue};
-use parser::{filter_nodes, is_heading};
+use parser::{filter_nodes, is_ul};
 use ruleset::{RuleResult, RuleResultDetails};
 use rules::extensions::VecExt;
 use std::cell::Ref;
 
 pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
-    let headings = filter_nodes(root.children(), is_heading);
-    let mut prev_level = 0;
     let mut details: Vec<RuleResultDetails> = Vec::new();
-    headings.into_iter().map(|x| x.data.borrow()).for_each(|node: Ref<Ast>| {
-        if let NodeValue::Heading(x) = node.value {
-            let current_level = x.level;
-            if current_level > prev_level + 1 {
-                details.push(RuleResultDetails::from_node(&node));
-            }
-            prev_level = current_level;
+    if let Some(heading) = filter_nodes(root.children(), is_ul).first() {
+        let node: Ref<Ast> = heading.data.borrow();
+        if let NodeValue::List(x) = node.value {
+            // if x.level !=1 {
+            //     details.push(RuleResultDetails::from_node(&node));
+            // }
+            println!("{:?}", x);
+            // TODO: Check inconsistency in all ul. All dash or period
         }
-    });
+    }
+
     RuleResult::new(
-        "MD001",
-        "header-increment",
-        "Header levels should only increment by one level at a time",
-        details.to_option(),
+        "MD004",
+        "ul-style",
+        "Unordered list style",
+        details.to_option()
     )
 }
 
@@ -35,21 +35,21 @@ mod test {
     #[test]
     fn it_has_details_if_ko() {
         let arena = Arena::new();
-        let root = get_ast("fixtures/md001/md001_ko.md", &arena);
+        let root = get_ast("fixtures/md003/md003_ko.md", &arena);
         let result = check(root);
         assert!(result.details.is_some());
         let details = result.details.unwrap();
         assert_eq!(details.len(), 1);
         let first = &details[0];
-        assert_eq!(first.line, 9);
+        assert_eq!(first.line, 1);
         assert_eq!(first.column, 1);
-        assert_eq!(first.content, "TITLE3");
+        assert_eq!(first.content, "Test");
     }
 
     #[test]
     fn it_does_not_have_details_if_all_ok() {
         let arena = Arena::new();
-        let root = get_ast("fixtures/md001/md001_ok.md", &arena);
+        let root = get_ast("fixtures/md003/md003_ok.md", &arena);
         let result = check(root);
         assert!(result.details.is_none());
     }
@@ -57,7 +57,7 @@ mod test {
     #[test]
     fn it_does_not_have_details_if_no_headers() {
         let arena = Arena::new();
-        let root = get_ast("fixtures/md001/md001_no_headings.md", &arena);
+        let root = get_ast("fixtures/md003/md003_no_headings.md", &arena);
         let result = check(root);
         assert!(result.details.is_none());
     }
