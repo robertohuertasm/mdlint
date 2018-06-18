@@ -104,7 +104,7 @@ impl RuleResultDetails {
 
     pub fn to_string(&self) -> String {
         format!(
-            "ln. {}, col. {}: '{}'",
+            "ln. {}, col. {}: {}",
             self.line, self.column, self.content
         )
     }
