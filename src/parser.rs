@@ -9,9 +9,8 @@ use std::io::{Error, Read};
 use std::path::Path;
 
 crate fn get_ast<'a>(path: &str, arena: &'a Arena<AstNode<'a>>) -> &'a AstNode<'a> {
-    let text = read_file(path).expect(&format!("Failed to find file: {}", path));
-    let root = parse_document(arena, &text, &ComrakOptions::default());
-    root
+    let text = read_file(path).unwrap_or_else(|_| panic!("Failed to find file: {}", path));
+    parse_document(arena, &text, &ComrakOptions::default())
 }
 
 crate fn read_file(file_path: &str) -> Result<String, Error> {

@@ -16,14 +16,15 @@ crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
             if let NodeValue::List(x) = node.value {
                 if i == 0 {
                     li_type = x.bullet_char;
-                } else {
-                    if x.bullet_char != li_type {
-                        details.push(RuleResultDetails::new(
-                            node.start_line,
-                            node.start_column,
-                            format!("[Expected: {}; Actual: {}]", li_type as char, x.bullet_char as char),
-                        ));
-                    }
+                } else if x.bullet_char != li_type {
+                    details.push(RuleResultDetails::new(
+                        node.start_line,
+                        node.start_column,
+                        format!(
+                            "[Expected: {}; Actual: {}]",
+                            li_type as char, x.bullet_char as char
+                        ),
+                    ));
                 }
             }
         });

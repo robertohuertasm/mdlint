@@ -1,8 +1,8 @@
-use comrak::nodes::{AstNode, Ast};
+use comrak::nodes::{Ast, AstNode};
 use console::style;
 use crate::emoji;
 use crate::parser;
-use std::{fmt, cell::Ref};
+use std::{cell::Ref, fmt};
 use typed_arena::Arena;
 
 crate trait RuleCheck {
@@ -35,8 +35,6 @@ impl RuleSet {
     }
 }
 
-
-
 #[derive(Debug)]
 crate struct RuleResult {
     crate name: String,
@@ -46,7 +44,12 @@ crate struct RuleResult {
 }
 
 impl RuleResult {
-    crate fn new(name: &str, alias: &str, description: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
+    crate fn new(
+        name: &str,
+        alias: &str,
+        description: &str,
+        details: Option<Vec<RuleResultDetails>>,
+    ) -> Self {
         RuleResult {
             name: name.to_string(),
             alias: alias.to_string(),
@@ -98,15 +101,12 @@ impl RuleResultDetails {
         RuleResultDetails::new(
             node.start_line,
             node.start_column,
-            parser::content_to_string(node.content.to_vec())
+            parser::content_to_string(node.content.to_vec()),
         )
     }
 
     crate fn to_string(&self) -> String {
-        format!(
-            "ln. {}, col. {}: {}",
-            self.line, self.column, self.content
-        )
+        format!("ln. {}, col. {}: {}", self.line, self.column, self.content)
     }
 }
 

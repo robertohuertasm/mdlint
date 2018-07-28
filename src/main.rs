@@ -1,11 +1,11 @@
 #![feature(rust_2018_preview)]
 #![warn(rust_2018_idioms)]
+#![allow(clippy_pedantic)]
 
 mod emoji;
 mod parser;
 mod rules;
 mod ruleset;
-
 
 fn main() {
     let rs = ruleset::RuleSet {
