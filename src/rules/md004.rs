@@ -4,7 +4,7 @@ use crate::rules::extensions::VecExt;
 use crate::ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
-pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
+crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
     let mut li_type: u8 = 42; // dash
     let uls = filter_nodes(root.children(), is_ul);
@@ -12,7 +12,7 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     uls.into_iter()
         .map(|x| x.data.borrow())
         .enumerate()
-        .for_each(|(i, node): (usize, Ref<Ast>)| {
+        .for_each(|(i, node): (usize, Ref<'_, Ast>)| {
             if let NodeValue::List(x) = node.value {
                 if i == 0 {
                     li_type = x.bullet_char;

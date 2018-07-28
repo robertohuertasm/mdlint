@@ -1,7 +1,7 @@
 #[macro_export]
 macro_rules! rule {
     ($name:ident : $func:expr) => {{
-        pub struct $name {}
+        crate struct $name {}
 
         impl RuleCheck for $name {
             fn check<'a>(&self, root: &'a AstNode<'a>) -> RuleResult {

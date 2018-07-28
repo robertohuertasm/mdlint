@@ -5,11 +5,11 @@ use crate::ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
 // TODO: implement MD003
-pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
+crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
 
     if let Some(heading) = filter_nodes(root.children(), is_heading).first() {
-        let node: Ref<Ast> = heading.data.borrow();
+        let node: Ref<'_, Ast> = heading.data.borrow();
         if let NodeValue::Heading(x) = node.value {
             if x.level != 1 {
                 details.push(RuleResultDetails::from_node(&node));

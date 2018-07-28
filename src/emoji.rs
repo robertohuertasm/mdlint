@@ -1,7 +1,7 @@
 use console::Emoji;
 
-pub static ERROR: Emoji = Emoji("⛔  ", "");
-pub static INFO: Emoji = Emoji("   ℹ️  ", "   ->  ");
+crate static ERROR: Emoji<'_, '_> = Emoji("⛔  ", "");
+crate static INFO: Emoji<'_, '_> = Emoji("   ℹ️  ", "   ->  ");
 // pub static TARGET: Emoji = Emoji("🎯  ", "");
 // pub static CYCLONE: Emoji = Emoji("🌀  ", "");
 // pub static FOLDER: Emoji = Emoji("📂  ", "");

@@ -9,7 +9,7 @@ mod md002;
 mod md003;
 mod md004;
 
-pub fn get_rules() -> Vec<Box<dyn RuleCheck>> {
+crate fn get_rules() -> Vec<Box<dyn RuleCheck>> {
     vec![
         boxedrule!{ MD001: md001::check },
         boxedrule!{ MD002: md002::check },

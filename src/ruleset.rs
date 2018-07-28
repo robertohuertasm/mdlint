@@ -5,17 +5,17 @@ use crate::parser;
 use std::{fmt, cell::Ref};
 use typed_arena::Arena;
 
-pub trait RuleCheck {
+crate trait RuleCheck {
     fn check<'a>(&self, node: &'a AstNode<'a>) -> RuleResult;
 }
 
-pub struct RuleSet {
-    pub name: String,
-    pub rules: Vec<Box<dyn RuleCheck>>,
+crate struct RuleSet {
+    crate name: String,
+    crate rules: Vec<Box<dyn RuleCheck>>,
 }
 
 impl RuleSet {
-    pub fn run(&self, file_path: &str) -> Vec<RuleResult> {
+    crate fn run(&self, file_path: &str) -> Vec<RuleResult> {
         let arena = Arena::new();
         let root = parser::get_ast(file_path, &arena);
 
@@ -38,15 +38,15 @@ impl RuleSet {
 
 
 #[derive(Debug)]
-pub struct RuleResult {
-    pub name: String,
-    pub alias: String,
-    pub description: String,
-    pub details: Option<Vec<RuleResultDetails>>,
+crate struct RuleResult {
+    crate name: String,
+    crate alias: String,
+    crate description: String,
+    crate details: Option<Vec<RuleResultDetails>>,
 }
 
 impl RuleResult {
-    pub fn new(name: &str, alias: &str, description: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
+    crate fn new(name: &str, alias: &str, description: &str, details: Option<Vec<RuleResultDetails>>) -> Self {
         RuleResult {
             name: name.to_string(),
             alias: alias.to_string(),
@@ -55,7 +55,7 @@ impl RuleResult {
         }
     }
 
-    pub fn to_string(&self) -> String {
+    crate fn to_string(&self) -> String {
         let title = format!("{}/{}", self.name, self.alias);
         let mut final_str = format!(
             "{}{}\r\n{}\r\n",
@@ -73,20 +73,20 @@ impl RuleResult {
 }
 
 impl fmt::Display for RuleResult {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_string())
     }
 }
 
 #[derive(Debug)]
-pub struct RuleResultDetails {
-    pub line: u32,
-    pub column: usize,
-    pub content: String,
+crate struct RuleResultDetails {
+    crate line: u32,
+    crate column: usize,
+    crate content: String,
 }
 
 impl RuleResultDetails {
-    pub fn new(line: u32, column: usize, content: String) -> Self {
+    crate fn new(line: u32, column: usize, content: String) -> Self {
         RuleResultDetails {
             line,
             column,
@@ -94,7 +94,7 @@ impl RuleResultDetails {
         }
     }
 
-    pub fn from_node(node: &Ref<Ast>) -> Self {
+    crate fn from_node(node: &Ref<'_, Ast>) -> Self {
         RuleResultDetails::new(
             node.start_line,
             node.start_column,
@@ -102,7 +102,7 @@ impl RuleResultDetails {
         )
     }
 
-    pub fn to_string(&self) -> String {
+    crate fn to_string(&self) -> String {
         format!(
             "ln. {}, col. {}: {}",
             self.line, self.column, self.content
@@ -111,7 +111,7 @@ impl RuleResultDetails {
 }
 
 impl fmt::Display for RuleResultDetails {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.to_string())
     }
 }
