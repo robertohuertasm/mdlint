@@ -1,4 +1,5 @@
 #![feature(rust_2018_preview)]
+#![warn(rust_2018_idioms)]
 extern crate comrak;
 extern crate console;
 extern crate typed_arena;

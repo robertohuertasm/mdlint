@@ -1,4 +1,4 @@
-use ruleset::RuleResultDetails;
+use crate::ruleset::RuleResultDetails;
 
 pub trait VecExt {
     fn to_option(self) -> Option<Vec<RuleResultDetails>>;

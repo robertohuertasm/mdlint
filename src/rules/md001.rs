@@ -1,7 +1,7 @@
 use comrak::nodes::{Ast, AstNode, NodeValue};
-use parser::{filter_nodes, is_heading};
-use rules::extensions::VecExt;
-use ruleset::{RuleResult, RuleResultDetails};
+use crate::parser::{filter_nodes, is_heading};
+use crate::rules::extensions::VecExt;
+use crate::ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
 pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
@@ -34,7 +34,7 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
 mod test {
 
     use super::*;
-    use parser::get_ast;
+    use crate::parser::get_ast;
     use typed_arena::Arena;
 
     #[test]

@@ -1,7 +1,7 @@
 use comrak::nodes::{AstNode, Ast};
 use console::style;
-use emoji;
-use parser;
+use crate::emoji;
+use crate::parser;
 use std::{fmt, cell::Ref};
 use typed_arena::Arena;
 
@@ -11,7 +11,7 @@ pub trait RuleCheck {
 
 pub struct RuleSet {
     pub name: String,
-    pub rules: Vec<Box<RuleCheck>>,
+    pub rules: Vec<Box<dyn RuleCheck>>,
 }
 
 impl RuleSet {
