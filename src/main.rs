@@ -1,6 +1,6 @@
 #![feature(rust_2018_preview)]
 #![warn(rust_2018_idioms)]
-#![allow(clippy_pedantic)]
+// #![allow(clippy_pedantic)]
 
 mod emoji;
 mod parser;
