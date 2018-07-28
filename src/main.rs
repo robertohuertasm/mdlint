@@ -1,3 +1,4 @@
+#![feature(rust_2018_preview)]
 extern crate comrak;
 extern crate console;
 extern crate typed_arena;
