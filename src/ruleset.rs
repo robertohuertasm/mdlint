@@ -5,31 +5,23 @@ use crate::parser;
 use std::{cell::Ref, fmt};
 use typed_arena::Arena;
 
-crate trait RuleCheck {
-    fn check<'a>(&self, node: &'a AstNode<'a>) -> RuleResult;
+crate type CheckFn<'a> = dyn Fn(&'a AstNode<'a>) -> RuleResult;
+
+crate struct RuleSet<'a> {
+    crate arena: &'a Arena<AstNode<'a>>,
+    crate rules: Vec<Box<CheckFn<'a>>>,
 }
 
-crate struct RuleSet {
-    crate name: String,
-    crate rules: Vec<Box<dyn RuleCheck>>,
-}
+impl RuleSet<'a> {
+    crate fn new(rules: Vec<Box<CheckFn<'a>>>, arena: &'a Arena<AstNode<'a>>) -> RuleSet<'a> {
+        RuleSet { rules, arena }
+    }
 
-impl RuleSet {
     crate fn run(&self, file_path: &str) -> Vec<RuleResult> {
-        let arena = Arena::new();
-        let root = parser::get_ast(file_path, &arena);
-
-        // TODO: Use this to know the format of the returning nodes
-        /*
-        let headings = parser::filter_nodes(root.children(), parser::is_heading);
-        headings
-            .into_iter()
-            .for_each(|x| println!("{:?}", x.data.borrow_mut()));
-        */
-
+        let root = parser::get_ast(file_path, &self.arena);
         self.rules
             .iter()
-            .map(|r| r.check(root))
+            .map(|f| f(root))
             .filter(|r| r.details.is_some())
             .collect()
     }

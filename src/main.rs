@@ -7,13 +7,14 @@ mod parser;
 mod rules;
 mod ruleset;
 
-fn main() {
-    let rs = ruleset::RuleSet {
-        name: "Strict".to_string(),
-        rules: rules::get_rules(),
-    };
+use typed_arena::Arena;
+use crate::ruleset::RuleSet;
 
+fn main() {
+    let arena = Arena::new();
+    let rs = RuleSet::new(rules::get_rules(), &arena);
     let result = rs.run("fixtures/md004/md004_ko.md");
+
     result.into_iter().for_each(|x| {
         println!("{}\r\n", x);
     });
