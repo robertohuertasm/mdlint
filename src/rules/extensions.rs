@@ -1,12 +1,12 @@
-use ruleset::RuleResultDetails;
+use crate::ruleset::RuleResultDetails;
 
-pub trait VecExt {
+crate trait VecExt {
     fn to_option(self) -> Option<Vec<RuleResultDetails>>;
 }
 
 impl VecExt for Vec<RuleResultDetails> {
     fn to_option(self) -> Option<Vec<RuleResultDetails>> {
-        if self.len() > 0 {
+        if !self.is_empty() {
             Some(self)
         } else {
             None

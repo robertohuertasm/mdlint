@@ -1,10 +1,10 @@
 use comrak::nodes::{Ast, AstNode, NodeValue};
-use parser::{filter_nodes, is_heading};
-use rules::extensions::VecExt;
-use ruleset::{RuleResult, RuleResultDetails};
+use crate::parser::{filter_nodes, is_heading};
+use crate::rules::extensions::VecExt;
+use crate::ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
-pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
+crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut prev_level = 0;
     let mut details: Vec<RuleResultDetails> = Vec::new();
     let headings = filter_nodes(root.children(), is_heading);
@@ -12,7 +12,7 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     headings
         .into_iter()
         .map(|x| x.data.borrow())
-        .for_each(|node: Ref<Ast>| {
+        .for_each(|node: Ref<'_, Ast>| {
             if let NodeValue::Heading(x) = node.value {
                 let current_level = x.level;
                 if current_level > prev_level + 1 {
@@ -34,7 +34,7 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
 mod test {
 
     use super::*;
-    use parser::get_ast;
+    use crate::parser::get_ast;
     use typed_arena::Arena;
 
     #[test]

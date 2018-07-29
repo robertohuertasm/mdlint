@@ -1,5 +1,5 @@
 use comrak::nodes::AstNode;
-use ruleset::{RuleCheck, RuleResult};
+use crate::ruleset::{RuleCheck, RuleResult};
 
 #[macro_use]
 mod macros;
@@ -9,7 +9,7 @@ mod md002;
 mod md003;
 mod md004;
 
-pub fn get_rules() -> Vec<Box<RuleCheck>> {
+crate fn get_rules() -> Vec<Box<dyn RuleCheck>> {
     vec![
         boxedrule!{ MD001: md001::check },
         boxedrule!{ MD002: md002::check },

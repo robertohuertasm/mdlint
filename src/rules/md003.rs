@@ -1,15 +1,15 @@
 use comrak::nodes::{Ast, AstNode, NodeValue};
-use parser::{filter_nodes, is_heading};
-use rules::extensions::VecExt;
-use ruleset::{RuleResult, RuleResultDetails};
+use crate::parser::{filter_nodes, is_heading};
+use crate::rules::extensions::VecExt;
+use crate::ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
 // TODO: implement MD003
-pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
+crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
 
     if let Some(heading) = filter_nodes(root.children(), is_heading).first() {
-        let node: Ref<Ast> = heading.data.borrow();
+        let node: Ref<'_, Ast> = heading.data.borrow();
         if let NodeValue::Heading(x) = node.value {
             if x.level != 1 {
                 details.push(RuleResultDetails::from_node(&node));
@@ -24,7 +24,7 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
 mod test {
 
     use super::*;
-    use parser::get_ast;
+    use crate::parser::get_ast;
     use typed_arena::Arena;
 
     #[test]

@@ -1,10 +1,10 @@
 use comrak::nodes::{Ast, AstNode, NodeValue};
-use parser::{filter_nodes, is_ul};
-use rules::extensions::VecExt;
-use ruleset::{RuleResult, RuleResultDetails};
+use crate::parser::{filter_nodes, is_ul};
+use crate::rules::extensions::VecExt;
+use crate::ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
-pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
+crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
     let mut li_type: u8 = 42; // dash
     let uls = filter_nodes(root.children(), is_ul);
@@ -12,18 +12,19 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     uls.into_iter()
         .map(|x| x.data.borrow())
         .enumerate()
-        .for_each(|(i, node): (usize, Ref<Ast>)| {
+        .for_each(|(i, node): (usize, Ref<'_, Ast>)| {
             if let NodeValue::List(x) = node.value {
                 if i == 0 {
                     li_type = x.bullet_char;
-                } else {
-                    if x.bullet_char != li_type {
-                        details.push(RuleResultDetails::new(
-                            node.start_line,
-                            node.start_column,
-                            format!("[Expected: {}; Actual: {}]", li_type as char, x.bullet_char as char),
-                        ));
-                    }
+                } else if x.bullet_char != li_type {
+                    details.push(RuleResultDetails::new(
+                        node.start_line,
+                        node.start_column,
+                        format!(
+                            "[Expected: {}; Actual: {}]",
+                            li_type as char, x.bullet_char as char
+                        ),
+                    ));
                 }
             }
         });
@@ -40,7 +41,7 @@ pub fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
 mod test {
 
     use super::*;
-    use parser::get_ast;
+    use crate::parser::get_ast;
     use typed_arena::Arena;
 
     #[test]

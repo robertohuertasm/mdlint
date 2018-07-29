@@ -8,51 +8,50 @@ use std::fs::File;
 use std::io::{Error, Read};
 use std::path::Path;
 
-pub fn get_ast<'a>(path: &str, arena: &'a Arena<AstNode<'a>>) -> &'a AstNode<'a> {
-    let text = read_file(path).expect(&format!("Failed to find file: {}", path));
-    let root = parse_document(arena, &text, &ComrakOptions::default());
-    root
+crate fn get_ast<'a>(path: &str, arena: &'a Arena<AstNode<'a>>) -> &'a AstNode<'a> {
+    let text = read_file(path).unwrap_or_else(|_| panic!("Failed to find file: {}", path));
+    parse_document(arena, &text, &ComrakOptions::default())
 }
 
-pub fn read_file(file_path: &str) -> Result<String, Error> {
+crate fn read_file(file_path: &str) -> Result<String, Error> {
     let mut tokens = String::new();
     let mut f = File::open(Path::new(file_path))?;
     f.read_to_string(&mut tokens)?;
     Ok(tokens)
 }
 
-pub fn extract_content(node: &AstNode) -> String {
+crate fn extract_content(node: &AstNode<'_>) -> String {
     let data = node.data.borrow().content.to_vec();
     content_to_string(data)
 }
 
-pub fn content_to_string(content: Vec<u8>) -> String {
+crate fn content_to_string(content: Vec<u8>) -> String {
     String::from_utf8(content).expect("Something went wrong while transforming content to string")
 }
 
-pub fn filter_nodes<'a, T>(node: T, filter_fn: fn(&NodeValue) -> bool) -> Vec<&'a AstNode<'a>>
+crate fn filter_nodes<'a, T>(node: T, filter_fn: fn(&NodeValue) -> bool) -> Vec<&'a AstNode<'a>>
 where
     T: Iterator<Item = &'a AstNode<'a>>,
 {
     node.filter(|x| filter_fn(&x.data.borrow_mut().value))
-        .collect::<Vec<&AstNode>>()
+        .collect::<Vec<&AstNode<'_>>>()
 }
 
-pub fn is_heading(node: &NodeValue) -> bool {
+crate fn is_heading(node: &NodeValue) -> bool {
     match node {
         NodeValue::Heading(_) => true,
         _ => false,
     }
 }
 
-pub fn is_ul(node: &NodeValue) -> bool {
+crate fn is_ul(node: &NodeValue) -> bool {
     match node {
         NodeValue::List(x) if x.list_type == ListType::Bullet => true,
         _ => false,
     }
 }
 
-pub fn is_ol(node: &NodeValue) -> bool {
+crate fn is_ol(node: &NodeValue) -> bool {
     match node {
         NodeValue::List(x) if x.list_type == ListType::Ordered => true,
         _ => false,
