@@ -28,11 +28,11 @@ impl RuleSet<'a> {
 }
 
 #[derive(Debug)]
-crate struct RuleResult {
-    crate name: String,
-    crate alias: String,
-    crate description: String,
-    crate details: Option<Vec<RuleResultDetails>>,
+pub struct RuleResult {
+    pub name: String,
+    pub alias: String,
+    pub description: String,
+    pub details: Option<Vec<RuleResultDetails>>,
 }
 
 impl RuleResult {
@@ -74,10 +74,10 @@ impl fmt::Display for RuleResult {
 }
 
 #[derive(Debug)]
-crate struct RuleResultDetails {
-    crate line: u32,
-    crate column: usize,
-    crate content: String,
+pub struct RuleResultDetails {
+    pub line: u32,
+    pub column: usize,
+    pub content: String,
 }
 
 impl RuleResultDetails {

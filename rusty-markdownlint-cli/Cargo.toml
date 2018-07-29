@@ -1,0 +1,10 @@
+cargo-features = ["edition"]
+
+[package]
+edition = '2018'
+name = "rusty-markdownlint-cli"
+version = "0.1.0"
+authors = ["Roberto Huertas <roberto.huertas@outlook.com>"]
+
+[dependencies]
+rusty-markdownlint = { path = "../rusty-markdownlint" }
