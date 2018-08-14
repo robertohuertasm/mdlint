@@ -6,7 +6,7 @@ use rusty_markdownlint::process;
 use rusty_markdownlint::ruleset::RuleResult;
 
 fn main() {
-    let file = "rusty-markdownlint/fixtures/md004/md004_ko.md";
+    let file = "rusty-markdownlint/fixtures/md041/md041_ko.md";
     let result = process(file);
     print(result);
 }
