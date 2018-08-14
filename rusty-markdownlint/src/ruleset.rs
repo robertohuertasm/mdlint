@@ -12,7 +12,7 @@ crate struct RuleSet<'a> {
     crate rules: Vec<Box<CheckFn<'a>>>,
 }
 
-impl RuleSet<'a> {
+impl<'a> RuleSet<'a> {
     crate fn new(rules: Vec<Box<CheckFn<'a>>>, arena: &'a Arena<AstNode<'a>>) -> RuleSet<'a> {
         RuleSet { rules, arena }
     }
