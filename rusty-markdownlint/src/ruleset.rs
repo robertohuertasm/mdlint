@@ -42,7 +42,7 @@ impl RuleResult {
         description: &str,
         details: Option<Vec<RuleResultDetails>>,
     ) -> Self {
-        RuleResult {
+        Self {
             name: name.to_string(),
             alias: alias.to_string(),
             description: description.to_string(),
@@ -82,7 +82,7 @@ pub struct RuleResultDetails {
 
 impl RuleResultDetails {
     crate fn new(line: u32, column: usize, content: String) -> Self {
-        RuleResultDetails {
+        Self {
             line,
             column,
             content,
@@ -90,7 +90,7 @@ impl RuleResultDetails {
     }
 
     crate fn from_node(node: &Ref<'_, Ast>) -> Self {
-        RuleResultDetails::new(
+        Self::new(
             node.start_line,
             node.start_column,
             parser::content_to_string(node.content.to_vec()),

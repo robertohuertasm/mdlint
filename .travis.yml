@@ -3,6 +3,12 @@ rust:
   # - stable
   # - beta
   - nightly
+before_script:
+  - rustup component add rustfmt-preview
+  - rustup component add clippy-preview --toolchain=nightly
+script:
+  - cargo fmt --all -- --check
+  - cargo clippy --all -- -D clippy_pedantic
 matrix:
   # allow_failures:
   #   - rust: stable

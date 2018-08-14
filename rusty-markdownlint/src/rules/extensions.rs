@@ -6,10 +6,10 @@ crate trait VecExt {
 
 impl VecExt for Vec<RuleResultDetails> {
     fn to_option(self) -> Option<Vec<RuleResultDetails>> {
-        if !self.is_empty() {
-            Some(self)
-        } else {
+        if self.is_empty() {
             None
+        } else {
+            Some(self)
         }
     }
 }

@@ -16,6 +16,10 @@ or
 
 `./run.sh`
 
+## Running clippy
+
+`cargo clippy --all -- -D clippy_pedantic`
+
 ## Rules covered
 
 See [original rules](https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md).
@@ -29,7 +33,7 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 5       |    [ ]    |   [ ]  | Inconsistent indentation for list items at the same level     |
 | 6       |    [ ]    |   [ ]  | Consider starting bulleted lists at the beginning of the line |
 | 7       |    [ ]    |   [ ]  | Unordered list indentation                                    |
-| 9       |    [ ]    |   [ ]  | Trailing spaces Hard tabs                                     |
+| 9       |    [x]    |   [x]  | Trailing spaces Hard tabs                                     |
 | 10      |    [ ]    |   [ ]  | Hard tabs                                                     |
 | 11      |    [ ]    |   [ ]  | Reversed link syntax                                          |
 | 12      |    [ ]    |   [ ]  | Multiple consecutive blank lines                              |
