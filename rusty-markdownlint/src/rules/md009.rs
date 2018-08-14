@@ -7,10 +7,23 @@ crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
     root.children().for_each(|x| {
         let content = extract_content(x);
-        if content.ends_with(' ') || content.ends_with(" \n") {
-            let node = x.data.borrow();
-            details.push(RuleResultDetails::from_node(&node));
-        }
+        let mut last_parsed_line = 0;
+        content.split('\n').filter(|l| !l.is_empty()).for_each(|l| {
+            if l.ends_with(' ') {
+                let node = x.data.borrow();
+                last_parsed_line = if last_parsed_line == node.start_line {
+                    last_parsed_line += 1;
+                    last_parsed_line
+                } else {
+                    node.start_line
+                };
+                details.push(RuleResultDetails::new(
+                    last_parsed_line,
+                    node.start_column,
+                    l.to_string(),
+                ));
+            }
+        });
     });
 
     RuleResult::new(
@@ -47,6 +60,28 @@ mod test {
         let first = &details[0];
         assert_eq!(first.line, 3);
         assert_eq!(first.column, 1);
-        assert_eq!(first.content, "This is my ok document \n");
+        assert_eq!(first.content, "This is my ok document ");
+        let second = &details[1];
+        assert_eq!(second.line, 5);
+        assert_eq!(second.column, 1);
+        assert_eq!(second.content, "Another ok line ");
+    }
+
+    #[test]
+    fn it_has_details_if_ko_with_single_line() {
+        let arena = Arena::new();
+        let root = get_ast("fixtures/md009/md009_ko_single_line.md", &arena);
+        let result = check(root);
+        assert!(result.details.is_some());
+        let details = result.details.unwrap();
+        assert_eq!(details.len(), 2);
+        let first = &details[0];
+        assert_eq!(first.line, 3);
+        assert_eq!(first.column, 1);
+        assert_eq!(first.content, "This is my ok document ");
+        let second = &details[1];
+        assert_eq!(second.line, 4);
+        assert_eq!(second.column, 1);
+        assert_eq!(second.content, "Another ok line ");
     }
 }
