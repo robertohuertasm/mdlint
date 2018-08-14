@@ -39,7 +39,7 @@ mod test {
         let first = &details[0];
         assert_eq!(first.line, 1);
         assert_eq!(first.column, 1);
-        assert_eq!(first.content, "Test");
+        assert!(first.content.starts_with("first line"));
     }
 
     #[test]
@@ -51,10 +51,16 @@ mod test {
     }
 
     #[test]
-    fn it_does_not_have_details_if_no_headers() {
+    fn if_no_headers_it_fails() {
         let arena = Arena::new();
         let root = get_ast("fixtures/md041/md041_no_items.md", &arena);
         let result = check(root);
-        assert!(result.details.is_none());
+        assert!(result.details.is_some());
+        let details = result.details.unwrap();
+        assert_eq!(details.len(), 1);
+        let first = &details[0];
+        assert_eq!(first.line, 1);
+        assert_eq!(first.column, 1);
+        assert!(first.content.starts_with("A version of this"));
     }
 }
