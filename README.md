@@ -36,7 +36,7 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 |---------|-----------|--------|---------------------------------------------------------------|
 | 1       |    [x]    |   [x]  | Header levels should only increment by one level at a time    |
 | 2       |    [x]    |   [x]  | First header should be a top level header                     |
-| 3       |    [ ]    |   [ ]  | Header style                                                  |
+| 3       |    [x]    |   [x]  | Header style                                                  |
 | 4       |    [x]    |   [x]  | Unordered list style                                          |
 | 5       |    [ ]    |   [ ]  | Inconsistent indentation for list items at the same level     |
 | 6       |    [ ]    |   [ ]  | Consider starting bulleted lists at the beginning of the line |

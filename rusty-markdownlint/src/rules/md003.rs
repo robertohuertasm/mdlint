@@ -4,18 +4,30 @@ use crate::rules::extensions::VecExt;
 use crate::ruleset::{RuleResult, RuleResultDetails};
 use std::cell::Ref;
 
-// TODO: implement MD003
 crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
+    let mut is_setext: bool= false;
+    let headings = filter_nodes(root.children(), is_heading);
 
-    if let Some(heading) = filter_nodes(root.children(), is_heading).first() {
-        let node: Ref<'_, Ast> = heading.data.borrow();
-        if let NodeValue::Heading(x) = node.value {
-            if x.level != 1 {
-                details.push(RuleResultDetails::from_node(&node));
+    headings.into_iter()
+        .map(|x| x.data.borrow())
+        .enumerate()
+        .for_each(|(i, node): (usize, Ref<'_, Ast>)| {
+            if let NodeValue::Heading(x) = node.value {
+                if i == 0 {
+                    is_setext = x.setext;
+                } else if x.setext != is_setext {
+                    details.push(RuleResultDetails::new(
+                        node.start_line,
+                        node.start_column,
+                        format!(
+                            "[Expected setext: {}; Actual setext: {}]",
+                            is_setext, x.setext
+                        ),
+                    ));
+                }
             }
-        }
-    }
+        });
 
     RuleResult::new("MD003", "header-style", "Header style", details.to_option())
 }
@@ -36,9 +48,9 @@ mod test {
         let details = result.details.unwrap();
         assert_eq!(details.len(), 1);
         let first = &details[0];
-        assert_eq!(first.line, 1);
+        assert_eq!(first.line, 5);
         assert_eq!(first.column, 1);
-        assert_eq!(first.content, "Test");
+        assert_eq!(first.content, "[Expected setext: false; Actual setext: true]");
     }
 
     #[test]
