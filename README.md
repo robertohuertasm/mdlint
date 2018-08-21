@@ -72,3 +72,5 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 40      |    [ ]    |   [ ]  | Fenced code blocks should have a language specified           |
 | 41      |    [x]    |   [x]  | First line in file should be a top level header               |
 | 46      |    [ ]    |   [ ]  | Code block style                                              |
+
+completed: 6 / 38
