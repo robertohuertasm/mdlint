@@ -73,4 +73,4 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 41      |    [x]    |   [x]  | First line in file should be a top level header               |
 | 46      |    [ ]    |   [ ]  | Code block style                                              |
 
-completed: 6 / 38
+completed: 7 / 38
