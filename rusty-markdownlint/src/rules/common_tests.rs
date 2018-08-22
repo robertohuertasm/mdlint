@@ -1,13 +1,9 @@
 #![cfg(test)]
 use crate::parser::get_ast;
-// use crate::ruleset::CheckFn;
-use comrak::nodes::AstNode;
-use crate::ruleset::RuleResult;
+use crate::ruleset::CheckFn;
 use typed_arena::Arena;
 
-type CheckFn = dyn for<'a> Fn(&'a AstNode<'a>) -> RuleResult;
-
-crate fn all_ok(file: &str, check: Box<CheckFn>) {
+crate fn all_ok(file: &str, check: CheckFn) {
     let arena = Arena::new();
     let a = &arena;
     let root = get_ast(file, a);

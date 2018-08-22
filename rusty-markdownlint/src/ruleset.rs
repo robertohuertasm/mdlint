@@ -5,20 +5,20 @@ use crate::parser;
 use std::{cell::Ref, fmt};
 use typed_arena::Arena;
 
-crate type CheckFn = dyn for<'a> Fn(&'a AstNode<'a>) -> RuleResult;
+crate type CheckFn = Box<dyn for<'a> Fn(&'a AstNode<'a>) -> RuleResult>;
 
-crate struct RuleSet<'a> {
-    crate arena: &'a Arena<AstNode<'a>>,
-    crate rules: Vec<Box<CheckFn>>,
+crate struct RuleSet {
+    crate rules: Vec<CheckFn>,
 }
 
-impl<'a> RuleSet<'a> {
-    crate fn new(rules: Vec<Box<CheckFn>>, arena: &'a Arena<AstNode<'a>>) -> RuleSet<'a> {
-        RuleSet { rules, arena }
+impl RuleSet {
+    crate fn new(rules: Vec<CheckFn>) -> Self {
+        Self { rules }
     }
 
     crate fn run(&self, file_path: &str) -> Vec<RuleResult> {
-        let root = parser::get_ast(file_path, &self.arena);
+        let arena = Arena::new();
+        let root = parser::get_ast(file_path, &arena);
         self.rules
             .iter()
             .map(|f| f(root))

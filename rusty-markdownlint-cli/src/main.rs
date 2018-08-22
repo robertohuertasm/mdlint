@@ -1,11 +1,11 @@
 #![warn(rust_2018_idioms)]
 
-use rusty_markdownlint::process;
-use rusty_markdownlint::ruleset::RuleResult;
+use rusty_markdownlint::{all, process, RuleResult};
 
 fn main() {
     let file = "rusty-markdownlint/fixtures/md010/md010_ko.md";
-    let result = process(file);
+    let rules = Some(all());
+    let result = process(file, rules);
     print(result);
 }
 

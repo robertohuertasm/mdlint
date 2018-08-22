@@ -3,14 +3,20 @@
 mod emoji;
 mod parser;
 mod rules;
-pub mod ruleset;
+mod ruleset;
 
-use crate::ruleset::{RuleResult, RuleSet};
-use typed_arena::Arena;
+pub use crate::rules::all;
+pub use crate::ruleset::RuleResult;
 
-pub fn process(path: &str) -> Vec<RuleResult> {
-    let arena = Arena::new();
-    let rs = RuleSet::new(rules::get_rules(), &arena);
+use crate::ruleset::{CheckFn, RuleSet};
+
+pub fn process(path: &str, rules: Option<Vec<CheckFn>>) -> Vec<RuleResult> {
+    let final_rules = if rules.is_none() {
+        rules::all()
+    } else {
+        rules.unwrap()
+    };
+    let rs = RuleSet::new(final_rules);
     rs.run(path)
 }
 
@@ -18,7 +24,7 @@ pub fn process(path: &str) -> Vec<RuleResult> {
 mod tests {
     #[test]
     fn it_works() {
-        let result = super::process("fixtures/md004/md004_ko.md");
+        let result = super::process("fixtures/md004/md004_ko.md", None);
         assert!(!result.is_empty());
     }
 }
