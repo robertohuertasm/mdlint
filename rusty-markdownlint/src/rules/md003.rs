@@ -38,7 +38,13 @@ mod test {
 
     use super::*;
     use crate::parser::get_ast;
+    use crate::rules::common_tests;
     use typed_arena::Arena;
+
+    #[test]
+    fn it_does_not_have_details_if_all_ok() {
+        common_tests::all_ok("fixtures/md003/md003_ok.md", Box::new(check));
+    }
 
     #[test]
     fn it_has_details_if_ko() {
@@ -55,14 +61,6 @@ mod test {
             first.content,
             "[Expected setext: false; Actual setext: true]"
         );
-    }
-
-    #[test]
-    fn it_does_not_have_details_if_all_ok() {
-        let arena = Arena::new();
-        let root = get_ast("fixtures/md003/md003_ok.md", &arena);
-        let result = check(root);
-        assert!(result.details.is_none());
     }
 
     #[test]

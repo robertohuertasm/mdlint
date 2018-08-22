@@ -1,5 +1,6 @@
 use crate::ruleset::CheckFn;
 
+mod common_tests;
 mod extensions;
 mod md001;
 mod md002;
@@ -9,7 +10,7 @@ mod md009;
 mod md010;
 mod md041;
 
-crate fn get_rules<'a>() -> Vec<Box<CheckFn<'a>>> {
+crate fn get_rules<'a>() -> Vec<Box<CheckFn>> {
     vec![
         Box::new(md001::check),
         Box::new(md002::check),
