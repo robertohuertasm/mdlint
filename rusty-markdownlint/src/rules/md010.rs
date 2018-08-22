@@ -26,12 +26,7 @@ crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
         });
     });
 
-    RuleResult::new(
-        "MD010",
-        "no-hard-tabs",
-        "Hard tabs",
-        details.to_option(),
-    )
+    RuleResult::new("MD010", "no-hard-tabs", "Hard tabs", details.to_option())
 }
 
 #[cfg(test)]

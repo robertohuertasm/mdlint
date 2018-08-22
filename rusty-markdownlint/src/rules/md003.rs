@@ -6,10 +6,11 @@ use std::cell::Ref;
 
 crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
-    let mut is_setext: bool= false;
+    let mut is_setext: bool = false;
     let headings = filter_nodes(root.children(), is_heading);
 
-    headings.into_iter()
+    headings
+        .into_iter()
         .map(|x| x.data.borrow())
         .enumerate()
         .for_each(|(i, node): (usize, Ref<'_, Ast>)| {
@@ -50,7 +51,10 @@ mod test {
         let first = &details[0];
         assert_eq!(first.line, 5);
         assert_eq!(first.column, 1);
-        assert_eq!(first.content, "[Expected setext: false; Actual setext: true]");
+        assert_eq!(
+            first.content,
+            "[Expected setext: false; Actual setext: true]"
+        );
     }
 
     #[test]
