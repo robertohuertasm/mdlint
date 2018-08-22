@@ -42,7 +42,7 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 6       |    [ ]    |   [ ]  | Consider starting bulleted lists at the beginning of the line |
 | 7       |    [ ]    |   [ ]  | Unordered list indentation                                    |
 | 9       |    [x]    |   [x]  | Trailing spaces Hard tabs                                     |
-| 10      |    [ ]    |   [ ]  | Hard tabs                                                     |
+| 10      |    [x]    |   [x]  | Hard tabs                                                     |
 | 11      |    [ ]    |   [ ]  | Reversed link syntax                                          |
 | 12      |    [ ]    |   [ ]  | Multiple consecutive blank lines                              |
 | 13      |    [ ]    |   [ ]  | Line length                                                   |

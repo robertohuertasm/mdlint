@@ -21,8 +21,17 @@ crate fn read_file(file_path: &str) -> Result<String, Error> {
 }
 
 crate fn extract_content(node: &AstNode<'_>) -> String {
-    let data = node.data.borrow().content.to_vec();
-    content_to_string(data)
+    let n = node.data.borrow();
+    if let NodeValue::CodeBlock(x) = n.value.clone() {
+        let st = content_to_string(x.literal.to_vec());
+        if n.start_column < 4 {
+            format!("\t{}", st)
+        } else {
+            st
+        }
+    } else {
+        content_to_string(n.content.to_vec())
+    }
 }
 
 crate fn content_to_string(content: Vec<u8>) -> String {
