@@ -10,7 +10,7 @@ mod md009;
 mod md010;
 mod md041;
 
-crate fn get_rules<'a>() -> Vec<Box<CheckFn>> {
+crate fn get_rules() -> Vec<Box<CheckFn>> {
     vec![
         Box::new(md001::check),
         Box::new(md002::check),
