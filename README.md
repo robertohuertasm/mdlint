@@ -43,8 +43,8 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 7       |    [ ]    |   [ ]  | Unordered list indentation                                    |
 | 9       |    [x]    |   [x]  | Trailing spaces Hard tabs                                     |
 | 10      |    [x]    |   [x]  | Hard tabs                                                     |
-| 11      |    [ ]    |   [ ]  | Reversed link syntax                                          |
-| 12      |    [ ]    |   [ ]  | Multiple consecutive blank lines                              |
+| 11      |    [x]    |   [x]  | Reversed link syntax                                          |
+| 12      |    [x]    |   [x]  | Multiple consecutive blank lines                              |
 | 13      |    [ ]    |   [ ]  | Line length                                                   |
 | 14      |    [ ]    |   [ ]  | Dollar signs used before commands without showing output      |
 | 18      |    [ ]    |   [ ]  | No space after hash on atx style header                       |
@@ -73,4 +73,4 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 41      |    [x]    |   [x]  | First line in file should be a top level header               |
 | 46      |    [ ]    |   [ ]  | Code block style                                              |
 
-completed: 7 / 38
+completed: 9 / 38

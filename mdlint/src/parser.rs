@@ -76,7 +76,7 @@ crate fn filter_nodes<'a>(
     traverse_nodes(node, Some(filter_fn))
 }
 
-crate fn traverse_nodes<'a>(
+fn traverse_nodes<'a>(
     node: &'a AstNode<'a>,
     filter_fn: Option<fn(&NodeValue) -> bool>,
 ) -> Vec<&'a AstNode<'a>> {

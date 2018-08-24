@@ -12,6 +12,7 @@ mod md004;
 mod md009;
 mod md010;
 mod md011;
+mod md012;
 mod md041;
 
 pub fn all() -> Vec<CheckFn> {
@@ -23,6 +24,7 @@ pub fn all() -> Vec<CheckFn> {
         Box::new(md009::check),
         Box::new(md010::check),
         Box::new(md011::check),
+        Box::new(md012::check),
         Box::new(md041::check),
     ]
 }
