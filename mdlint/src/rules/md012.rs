@@ -11,11 +11,11 @@ crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
         if i == 0 {
             return;
         }
-        let prev = nodes[i - 1];
-        let prev_end_line = prev.data.borrow().end_line;
-        let curr_start_line = n.data.borrow().start_line;
+        let curr = n.data.borrow();
+        let prev_end_line = nodes[i - 1].data.borrow().end_line;
+        let curr_start_line = curr.start_line;
         if curr_start_line - prev_end_line > 2 {
-            details.push(RuleResultDetails::from_node(&n.data.borrow()));
+            details.push(RuleResultDetails::from_node(&curr));
         }
     });
 
