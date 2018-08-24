@@ -10,3 +10,4 @@ authors = ["Roberto Huertas <roberto.huertas@outlook.com>"]
 console = "0.6.1"
 comrak = "0.2.14"
 typed-arena = "1.4.1"
+regex = "1"

@@ -38,12 +38,66 @@ crate fn content_to_string(content: Vec<u8>) -> String {
     String::from_utf8(content).expect("Something went wrong while transforming content to string")
 }
 
-crate fn filter_nodes<'a, T>(node: T, filter_fn: fn(&NodeValue) -> bool) -> Vec<&'a AstNode<'a>>
+crate fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
 where
-    T: Iterator<Item = &'a AstNode<'a>>,
+    F: Fn(&'a AstNode<'a>),
 {
-    node.filter(|x| filter_fn(&x.data.borrow_mut().value))
-        .collect::<Vec<&AstNode<'_>>>()
+    f(node);
+    for c in node.children() {
+        iter_nodes(c, f);
+    }
+}
+
+crate fn flatten_nodes<'a>(node: &'a AstNode<'a>) -> Vec<&'a AstNode<'a>> {
+    traverse_nodes(node, None)
+}
+
+crate fn flatten_nodes_with_content<'a>(node: &'a AstNode<'a>) -> Vec<&'a AstNode<'a>> {
+    traverse_nodes(node, None)
+        .into_iter()
+        .filter(|child| {
+            let n = child.data.borrow();
+            let has_content = n.content.len() > 0;
+            if has_content {
+                true
+            } else {
+                if let NodeValue::CodeBlock(ref x) = &n.value {
+                    return x.literal.len() > 0;
+                }
+                false
+            }
+        }).collect()
+}
+
+crate fn filter_nodes<'a>(
+    node: &'a AstNode<'a>,
+    filter_fn: fn(&NodeValue) -> bool,
+) -> Vec<&'a AstNode<'a>> {
+    traverse_nodes(node, Some(filter_fn))
+}
+
+crate fn traverse_nodes<'a>(
+    node: &'a AstNode<'a>,
+    filter_fn: Option<fn(&NodeValue) -> bool>,
+) -> Vec<&'a AstNode<'a>> {
+    let mut final_vec = Vec::new();
+    // println!("Node");
+    for child in node.children() {
+        // println!("------");
+        // println!("{:?}", child.data.borrow());
+        // println!("{}", extract_content(child));
+        if let Some(ffn) = filter_fn {
+            if ffn(&child.data.borrow_mut().value) {
+                final_vec.push(child);
+            }
+        } else {
+            final_vec.push(child);
+        }
+
+        let inner_vec = traverse_nodes(child, filter_fn);
+        final_vec.extend(inner_vec);
+    }
+    final_vec
 }
 
 crate fn is_heading(node: &NodeValue) -> bool {

@@ -7,7 +7,7 @@ use std::cell::Ref;
 crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut details: Vec<RuleResultDetails> = Vec::new();
     let mut li_type: u8 = 42; // dash
-    let uls = filter_nodes(root.children(), is_ul);
+    let uls = filter_nodes(root, is_ul);
 
     uls.into_iter()
         .map(|x| x.data.borrow())

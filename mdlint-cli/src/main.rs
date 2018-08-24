@@ -3,7 +3,7 @@
 use mdlint::{all, process, RuleResult};
 
 fn main() {
-    let file = "mdlint/fixtures/md010/md010_ko.md";
+    let file = "mdlint/fixtures/md011/md011_ko.md";
     let rules = Some(all());
     let result = process(file, rules);
     print(result);

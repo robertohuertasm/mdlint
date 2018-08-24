@@ -7,7 +7,7 @@ use std::cell::Ref;
 crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut prev_level = 0;
     let mut details: Vec<RuleResultDetails> = Vec::new();
-    let headings = filter_nodes(root.children(), is_heading);
+    let headings = filter_nodes(root, is_heading);
 
     headings
         .into_iter()
