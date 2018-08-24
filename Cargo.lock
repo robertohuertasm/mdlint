@@ -132,6 +132,22 @@ version = "0.2.40"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "mdlint"
+version = "0.1.0"
+dependencies = [
+ "comrak 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
+ "console 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "typed-arena 1.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "mdlint-cli"
+version = "0.1.0"
+dependencies = [
+ "mdlint 0.1.0",
+]
+
+[[package]]
 name = "memchr"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -248,22 +264,6 @@ version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "ucd-util 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "rusty-markdownlint"
-version = "0.1.0"
-dependencies = [
- "comrak 0.2.14 (registry+https://github.com/rust-lang/crates.io-index)",
- "console 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "typed-arena 1.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "rusty-markdownlint-cli"
-version = "0.1.0"
-dependencies = [
- "rusty-markdownlint 0.1.0",
 ]
 
 [[package]]

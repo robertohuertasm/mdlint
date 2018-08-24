@@ -1,4 +1,4 @@
-# rusty-markdownlint
+# mdlint
 
 [![Build Status](https://travis-ci.org/robertohuertasm/rusty-markdownlint.svg?branch=master)](https://travis-ci.org/robertohuertasm/rusty-markdownlint)
 
@@ -18,7 +18,7 @@ rustup component add rustfmt-preview --toolchain nightly
 
 Just run:
 
-`cargo run -p rusty-markdownlint-cli`
+`cargo run -p mdlint-cli`
 
 or
 
