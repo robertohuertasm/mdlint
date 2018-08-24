@@ -57,12 +57,12 @@ crate fn flatten_nodes_with_content<'a>(node: &'a AstNode<'a>) -> Vec<&'a AstNod
         .into_iter()
         .filter(|child| {
             let n = child.data.borrow();
-            let has_content = n.content.len() > 0;
+            let has_content = !n.content.is_empty();
             if has_content {
                 true
             } else {
                 if let NodeValue::CodeBlock(ref x) = &n.value {
-                    return x.literal.len() > 0;
+                    return !x.literal.is_empty();
                 }
                 false
             }

@@ -3,6 +3,7 @@ use crate::ruleset::CheckFn;
 #[cfg(test)]
 mod common_tests;
 
+mod common_checks;
 mod extensions;
 mod md001;
 mod md002;

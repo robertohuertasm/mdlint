@@ -1,31 +1,10 @@
 use comrak::nodes::AstNode;
-use crate::parser::extract_content;
+use crate::rules::common_checks::check_content;
 use crate::rules::extensions::VecExt;
-use crate::ruleset::{RuleResult, RuleResultDetails};
+use crate::ruleset::RuleResult;
 
 crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
-    let mut details: Vec<RuleResultDetails> = Vec::new();
-    root.children().for_each(|x| {
-        let content = extract_content(x);
-        let mut last_parsed_line = 0;
-        content.split('\n').filter(|l| !l.is_empty()).for_each(|l| {
-            if l.contains('\t') {
-                let node = x.data.borrow();
-                last_parsed_line = if last_parsed_line == node.start_line {
-                    last_parsed_line += 1;
-                    last_parsed_line
-                } else {
-                    node.start_line
-                };
-                details.push(RuleResultDetails::new(
-                    last_parsed_line,
-                    node.start_column,
-                    l.to_string(),
-                ));
-            }
-        });
-    });
-
+    let details = check_content(root, r"\t");
     RuleResult::new("MD010", "no-hard-tabs", "Hard tabs", details.to_option())
 }
 
