@@ -7,7 +7,8 @@ crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let mut prev_level = 0;
     let mut details: Vec<RuleResultDetails> = Vec::new();
 
-    filter_nodes(root, is_heading).into_iter()
+    filter_nodes(root, is_heading)
+        .into_iter()
         .map(|x| x.data.borrow())
         .for_each(|node| {
             if let NodeValue::Heading(x) = node.value {

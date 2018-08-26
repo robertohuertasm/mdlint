@@ -5,7 +5,7 @@ use crate::ruleset::RuleResult;
 
 crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let details = check_content(root, r"\([^)]+\)\[[^\]]+\]");
-    
+
     RuleResult::new(
         "MD011",
         "no-reversed-links",

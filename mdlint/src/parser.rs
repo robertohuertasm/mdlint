@@ -1,11 +1,11 @@
-use comrak::nodes::{Ast,AstNode, ListType, NodeValue};
+use comrak::nodes::{Ast, AstNode, ListType, NodeValue};
 use comrak::{parse_document, ComrakOptions};
 use typed_arena::Arena;
 
+use std::cell::Ref;
 use std::fs::File;
 use std::io::{Error, Read};
 use std::path::Path;
-use std::cell::Ref;
 
 crate fn get_ast<'a>(path: &str, arena: &'a Arena<AstNode<'a>>) -> &'a AstNode<'a> {
     let text = read_file(path).unwrap_or_else(|_| panic!("Failed to find file: {}", path));
@@ -20,10 +20,10 @@ crate fn read_file(file_path: &str) -> Result<String, Error> {
 }
 
 crate fn extract_content(node: &AstNode<'_>) -> String {
-    extract_content_from_node(node.data.borrow())
+    extract_content_from_node(&node.data.borrow())
 }
 
-crate fn extract_content_from_node(node: Ref<'_, Ast>) -> String {
+crate fn extract_content_from_node(node: &Ref<'_, Ast>) -> String {
     if let NodeValue::CodeBlock(x) = node.value.clone() {
         let st = content_to_string(x.literal.to_vec());
         if node.start_column < 4 {
@@ -128,7 +128,7 @@ crate fn is_ol(node: &NodeValue) -> bool {
 #[allow(dead_code)]
 crate fn is_paragraph(node: &NodeValue) -> bool {
     match node {
-        NodeValue::Paragraph  => true,
+        NodeValue::Paragraph => true,
         _ => false,
     }
 }
