@@ -55,9 +55,9 @@ mod test {
         assert_eq!(second.line, 9);
         assert_eq!(second.column, 1);
         assert_eq!(second.content, "This is another line\n");
-        let second = &details[2];
-        assert_eq!(second.line, 21);
-        assert_eq!(second.column, 3);
-        assert_eq!(second.content, "item two\n");
+        let third = &details[2];
+        assert_eq!(third.line, 21);
+        assert_eq!(third.column, 3);
+        assert_eq!(third.content, "item two\n");
     }
 }

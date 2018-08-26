@@ -5,6 +5,7 @@ use crate::ruleset::RuleResult;
 
 crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
     let details = check_content(root, r"\t");
+    
     RuleResult::new("MD010", "no-hard-tabs", "Hard tabs", details.to_option())
 }
 

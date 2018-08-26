@@ -47,7 +47,7 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 12      |    [x]    |   [x]  | Multiple consecutive blank lines                              |
 | 13      |    [ ]    |   [ ]  | Line length                                                   |
 | 14      |    [ ]    |   [ ]  | Dollar signs used before commands without showing output      |
-| 18      |    [ ]    |   [ ]  | No space after hash on atx style header                       |
+| 18      |    [x]    |   [x]  | No space after hash on atx style header                       |
 | 19      |    [ ]    |   [ ]  | Multiple spaces after hash on atx style header                |
 | 20      |    [ ]    |   [ ]  | No space inside hashes on closed atx style header             |
 | 21      |    [ ]    |   [ ]  | Multiple spaces inside hashes on closed atx style header      |

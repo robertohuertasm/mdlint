@@ -7,9 +7,8 @@ crate fn check_content<'a>(root: &'a AstNode<'a>, regex: &str) -> Vec<RuleResult
     let nodes = flatten_nodes_with_content(root);
     let rx = Regex::new(regex).unwrap();
     nodes.iter().fold(Vec::new(), |mut acc, &n| {
-        let content = extract_content(n);
         let mut last_parsed_line = 0;
-        content
+        extract_content(n)
             .split('\n')
             .filter(|line| !line.is_empty())
             .for_each(|line| {

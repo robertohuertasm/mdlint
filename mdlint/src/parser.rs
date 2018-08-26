@@ -1,12 +1,11 @@
-#![allow(dead_code)]
-
-use comrak::nodes::{AstNode, ListType, NodeValue};
+use comrak::nodes::{Ast,AstNode, ListType, NodeValue};
 use comrak::{parse_document, ComrakOptions};
 use typed_arena::Arena;
 
 use std::fs::File;
 use std::io::{Error, Read};
 use std::path::Path;
+use std::cell::Ref;
 
 crate fn get_ast<'a>(path: &str, arena: &'a Arena<AstNode<'a>>) -> &'a AstNode<'a> {
     let text = read_file(path).unwrap_or_else(|_| panic!("Failed to find file: {}", path));
@@ -21,16 +20,19 @@ crate fn read_file(file_path: &str) -> Result<String, Error> {
 }
 
 crate fn extract_content(node: &AstNode<'_>) -> String {
-    let n = node.data.borrow();
-    if let NodeValue::CodeBlock(x) = n.value.clone() {
+    extract_content_from_node(node.data.borrow())
+}
+
+crate fn extract_content_from_node(node: Ref<'_, Ast>) -> String {
+    if let NodeValue::CodeBlock(x) = node.value.clone() {
         let st = content_to_string(x.literal.to_vec());
-        if n.start_column < 4 {
+        if node.start_column < 4 {
             format!("\t{}", st)
         } else {
             st
         }
     } else {
-        content_to_string(n.content.to_vec())
+        content_to_string(node.content.to_vec())
     }
 }
 
@@ -38,6 +40,7 @@ crate fn content_to_string(content: Vec<u8>) -> String {
     String::from_utf8(content).expect("Something went wrong while transforming content to string")
 }
 
+#[allow(dead_code)]
 crate fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
 where
     F: Fn(&'a AstNode<'a>),
@@ -53,7 +56,7 @@ crate fn flatten_nodes<'a>(node: &'a AstNode<'a>) -> Vec<&'a AstNode<'a>> {
 }
 
 crate fn flatten_nodes_with_content<'a>(node: &'a AstNode<'a>) -> Vec<&'a AstNode<'a>> {
-    traverse_nodes(node, None)
+    flatten_nodes(node)
         .into_iter()
         .filter(|child| {
             let n = child.data.borrow();
@@ -114,9 +117,18 @@ crate fn is_ul(node: &NodeValue) -> bool {
     }
 }
 
+#[allow(dead_code)]
 crate fn is_ol(node: &NodeValue) -> bool {
     match node {
         NodeValue::List(x) if x.list_type == ListType::Ordered => true,
+        _ => false,
+    }
+}
+
+#[allow(dead_code)]
+crate fn is_paragraph(node: &NodeValue) -> bool {
+    match node {
+        NodeValue::Paragraph  => true,
         _ => false,
     }
 }
