@@ -18,7 +18,11 @@ rustup component add rustfmt-preview --toolchain nightly
 
 Just run:
 
-`cargo run -p mdlint-cli`
+```sh
+cargo run -p mdlint-cli
+# 2018 now accepts also running cargo run directly in a workspace project
+cargo run # should work in 2018
+```
 
 or
 
@@ -26,7 +30,7 @@ or
 
 ## Running clippy
 
-`cargo clippy --all -- -D clippy_pedantic`
+`cargo clippy --all -- -D clippy::pedantic`
 
 ## Rules covered
 
@@ -46,7 +50,7 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 11      |    [x]    |   [x]  | Reversed link syntax                                          |
 | 12      |    [x]    |   [x]  | Multiple consecutive blank lines                              |
 | 13      |    [ ]    |   [ ]  | Line length                                                   |
-| 14      |    [ ]    |   [ ]  | Dollar signs used before commands without showing output      |
+| 14      |    [x]    |   [x]  | Dollar signs used before commands without showing output      |
 | 18      |    [x]    |   [x]  | No space after hash on atx style header                       |
 | 19      |    [ ]    |   [ ]  | Multiple spaces after hash on atx style header                |
 | 20      |    [ ]    |   [ ]  | No space inside hashes on closed atx style header             |

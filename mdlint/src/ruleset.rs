@@ -78,6 +78,8 @@ pub struct RuleResultDetails {
     pub line: u32,
     pub column: usize,
     pub content: String,
+    pub previous_content: Option<String>,
+    pub next_content: Option<String>,
 }
 
 impl RuleResultDetails {
@@ -86,6 +88,8 @@ impl RuleResultDetails {
             line,
             column,
             content,
+            previous_content: None,
+            next_content: None,
         }
     }
 

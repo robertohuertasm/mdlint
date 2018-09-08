@@ -4,7 +4,7 @@ use crate::rules::extensions::VecExt;
 use crate::ruleset::RuleResult;
 
 crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
-    let details = check_content(root, r"^#+?[^\s]\S+");
+    let details = check_content(root, r"^#+?[^\s]\S+", None);
 
     RuleResult::new(
         "MD018",

@@ -1,5 +1,5 @@
 {
-"editor.formatOnSave": false,
-"editor.tabSize": 4,
-"debug.allowBreakpointsEverywhere": true
+  "editor.formatOnSave": false,
+  "editor.tabSize": 4,
+  "debug.allowBreakpointsEverywhere": true
 }

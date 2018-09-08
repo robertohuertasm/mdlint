@@ -60,14 +60,13 @@ crate fn flatten_nodes_with_content<'a>(node: &'a AstNode<'a>) -> Vec<&'a AstNod
         .into_iter()
         .filter(|child| {
             let n = child.data.borrow();
-            let has_content = !n.content.is_empty();
-            if has_content {
-                true
-            } else {
+            if n.content.is_empty() {
                 if let NodeValue::CodeBlock(ref x) = &n.value {
                     return !x.literal.is_empty();
                 }
                 false
+            } else {
+                true
             }
         }).collect()
 }
@@ -113,6 +112,13 @@ crate fn is_heading(node: &NodeValue) -> bool {
 crate fn is_ul(node: &NodeValue) -> bool {
     match node {
         NodeValue::List(x) if x.list_type == ListType::Bullet => true,
+        _ => false,
+    }
+}
+
+crate fn is_codeblock(node: &NodeValue) -> bool {
+    match node {
+        NodeValue::CodeBlock(_) => true,
         _ => false,
     }
 }
