@@ -7,7 +7,7 @@ pool:
   vmImage: 'Ubuntu 16.04' # other options: 'macOS 10.13', 'VS2017-Win2016'
 
 steps:
-- script: curl https://sh.rustup.rs -sSf -y | sh 
+- script: curl https://sh.rustup.rs -sSf | sh -s -- -y
   displayName: 'Install rust'
 
 - script: |
