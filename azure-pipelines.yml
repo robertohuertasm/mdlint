@@ -4,11 +4,16 @@
 # https://aka.ms/yaml
 
 pool:
-  vmImage: 'Ubuntu 16.04'
+  vmImage: 'Ubuntu 16.04' # other options: 'macOS 10.13', 'VS2017-Win2016'
 
 steps:
-- script: echo Hello rust!
-  displayName: 'Run a one-line script'
+- script: curl https://sh.rustup.rs -sSf | sh
+  displayName: 'Install rust'
+
+- script: |
+    rustup install nightly
+    rustup default nightly
+  displayName: 'Setting nightly'
 
 - script: |
     rustup component add rustfmt-preview
