@@ -10,7 +10,7 @@ steps:
 - script: curl https://sh.rustup.rs -sSf | sh -s -- -y
   displayName: 'Install rust'
 
-- script: export PATH=$HOME/.cargo/env:$PATH
+- script: export PATH=$HOME/.cargo/bin:$PATH
   displayName: 'Set the path'
 
 - script: |
