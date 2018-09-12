@@ -1,4 +1,5 @@
 #![warn(rust_2018_idioms)]
+#![feature(crate_visibility_modifier)]
 
 mod emoji;
 mod parser;

@@ -31,7 +31,7 @@ jobs:
 
     - script: |
         export PATH=$HOME/.cargo/bin:$PATH
-        cargo clippy --all -- -D clippy_pedantic
+        cargo clippy --all -- -D clippy::pedantic -A clippy::non-ascii-literal
       displayName: 'Cargo clippy'
 
   # - job: Windows macOS
