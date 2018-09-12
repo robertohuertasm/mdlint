@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/robertohuertasm/mdlint.svg?branch=master)](https://travis-ci.org/robertohuertasm/mdlint)
 
-[![Build Status](https://codecoding.visualstudio.com/robertohuertasm/_apis/build/status/robertohuertasm.mdlint)](https://codecoding.visualstudio.com/robertohuertasm/_build/latest?definitionId=7)
+[![Build Status](https://dev.azure.com/robertohuertasm/github-oss/_apis/build/status/robertohuertasm.mdlint)](https://dev.azure.com/robertohuertasm/github-oss/_build/latest?definitionId=1)
 
 Port of [markdownlint](https://github.com/markdownlint/markdownlint) to Rust.
 
