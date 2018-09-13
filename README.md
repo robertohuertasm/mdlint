@@ -60,7 +60,7 @@ See [original rules](https://github.com/markdownlint/markdownlint/blob/master/do
 | 22      |    [ ]    |   [ ]  | Headers should be surrounded by blank lines                   |
 | 23      |    [ ]    |   [ ]  | Headers must start at the beginning of the line               |
 | 24      |    [ ]    |   [ ]  | Multiple headers with the same content                        |
-| 25      |    [ ]    |   [ ]  | Multiple top level headers in the same document               |
+| 25      |    [x]    |   [x]  | Multiple top level headers in the same document               |
 | 26      |    [ ]    |   [ ]  | Trailing punctuation in header                                |
 | 27      |    [ ]    |   [ ]  | Multiple spaces after blockquote symbol                       |
 | 28      |    [ ]    |   [ ]  | Blank line inside blockquote                                  |

@@ -109,6 +109,13 @@ crate fn is_heading(node: &NodeValue) -> bool {
     }
 }
 
+crate fn is_heading_1(node: &NodeValue) -> bool {
+    match node {
+        NodeValue::Heading(x) if x.level == 1 => true,
+        _ => false,
+    }
+}
+
 crate fn is_ul(node: &NodeValue) -> bool {
     match node {
         NodeValue::List(x) if x.list_type == ListType::Bullet => true,
