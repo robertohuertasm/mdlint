@@ -1,12 +1,7 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 jobs:
   - job: Linux
     pool:
-      vmImage: 'Ubuntu 16.04' # other options: 'macOS 10.13', 'VS2017-Win2016'
+      vmImage: 'Ubuntu 16.04'
 
     steps:
     - script: curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -33,5 +28,32 @@ jobs:
         export PATH=$HOME/.cargo/bin:$PATH
         cargo clippy --all -- -D clippy::pedantic -A clippy::non-ascii-literal
       displayName: 'Cargo clippy'
+
+    - script: |
+        export PATH=$HOME/.cargo/bin:$PATH
+        cargo build --release
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      displayName: 'Cargo build'
+    
+    - task: ArchiveFiles@2
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      displayName: 'Archive target/release'
+      inputs:
+        rootFolderOrFile: 'target/release'
+        archiveFile: 'mdlint-linux.zip'
+
+    - task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@1
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      displayName: 'Release Linux'
+      inputs:
+        githubEndpoint: rob
+        githubRepository: 'robertohuertasm/mdlint'
+        githubTag: '$(Build.BuildNumber)'
+        githubReleaseTitle: '$(Build.BuildNumber)'
+        githubReleaseDraft: false
+        githubReleaseAsset: 'mdlint-linux.zip'
+        githubReuseDraftOnly: false
+
+
 
   # - job: Windows macOS

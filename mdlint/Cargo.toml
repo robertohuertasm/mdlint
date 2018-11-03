@@ -5,7 +5,7 @@ version = "0.1.0"
 authors = ["Roberto Huertas <roberto.huertas@outlook.com>"]
 
 [dependencies]
-console = "0.6.1"
+console = "0.6.2"
 comrak = "0.2.14"
 typed-arena = "1.4.1"
 regex = "1"
