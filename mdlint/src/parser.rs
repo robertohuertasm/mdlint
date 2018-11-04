@@ -68,7 +68,8 @@ crate fn flatten_nodes_with_content<'a>(node: &'a AstNode<'a>) -> Vec<&'a AstNod
             } else {
                 true
             }
-        }).collect()
+        })
+        .collect()
 }
 
 crate fn filter_nodes<'a>(

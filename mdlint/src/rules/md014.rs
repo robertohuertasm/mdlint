@@ -12,7 +12,8 @@ crate fn check<'a>(root: &'a AstNode<'a>) -> RuleResult {
         .filter(|d| match d.next_content {
             Some(ref line) if rx.is_match(line) => true,
             _ => false,
-        }).collect();
+        })
+        .collect();
 
     RuleResult::new(
         "MD014",
