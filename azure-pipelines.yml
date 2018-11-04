@@ -1,3 +1,4 @@
+name: $(SourceBranchName)
 jobs:
   - job: Linux
     pool:
