@@ -1,60 +1,22 @@
 name: $(SourceBranchName)
 jobs:
-  - job: Linux
-    pool:
-      vmImage: 'Ubuntu 16.04'
+- template: azure-pipelines/build_unix.yml
+  parameters:
+    name: Linux
+    vmImage: 'Ubuntu 16.04'
+    artifactName: 'mdlint-linux.zip'
+    repoName: 'robertohuertasm/mdlint'
 
-    steps:
-    - script: curl https://sh.rustup.rs -sSf | sh -s -- -y
-      displayName: 'Install rust'
+- template: azure-pipelines/build_unix.yml
+  parameters:
+    name: MacOS
+    vmImage: 'macOS-10.13'
+    artifactName: 'mdlint-osx.zip'
+    repoName: 'robertohuertasm/mdlint'
 
-    - script: |
-        export PATH=$HOME/.cargo/bin:$PATH
-        rustup install nightly
-        rustup default nightly
-      displayName: 'Setting nightly'
-
-    - script: |
-        export PATH=$HOME/.cargo/bin:$PATH
-        rustup component add rustfmt-preview
-        rustup component add clippy-preview --toolchain=nightly
-      displayName: 'installing Cargo components'
-
-    - script: |
-        export PATH=$HOME/.cargo/bin:$PATH
-        cargo fmt --all -- --check
-      displayName: 'Cargo fmt'
-
-    - script: |
-        export PATH=$HOME/.cargo/bin:$PATH
-        cargo clippy --all -- -D clippy::pedantic -A clippy::non-ascii-literal
-      displayName: 'Cargo clippy'
-
-    - script: |
-        export PATH=$HOME/.cargo/bin:$PATH
-        cargo build --release
-      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
-      displayName: 'Cargo build'
-    
-    - task: ArchiveFiles@2
-      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
-      displayName: 'Archive target/release'
-      inputs:
-        rootFolderOrFile: 'target/release'
-        archiveFile: 'mdlint-linux.zip'
-
-    - task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@1
-      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
-      displayName: 'Release Linux'
-      inputs:
-        githubEndpoint: rob
-        githubRepository: 'robertohuertasm/mdlint'
-        githubTag: '$(Build.BuildNumber)'
-        githubReleaseTitle: '$(Build.BuildNumber)'
-        githubReleaseDraft: false
-        githubReleaseAsset: 'mdlint-linux.zip'
-        githubReuseDraftOnly: false
-
-
-
-  # - job: Windows macOS
+- template: azure-pipelines/build_windows.yml
+  parameters:
+    name: Windows
+    vmImage: 'vs2017-win2016'
+    artifactName: 'mdlint-windows.zip'
+    repoName: 'robertohuertasm/mdlint'

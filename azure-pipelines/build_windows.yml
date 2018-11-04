@@ -1,0 +1,63 @@
+parameters:
+  name: ''
+  vmImage: ''
+  artifactName: ''
+  repoName: ''
+
+jobs:
+  - job: ${{parameters.name}}
+    pool:
+      vmImage: ${{parameters.vmImage}}
+
+    steps:
+    - powershell: |
+        Invoke-WebRequest -Uri https://win.rustup.rs/ -Outfile rustup-init.exe
+        .\rustup-init.exe -y
+      displayName: 'Installing rust'
+
+    - script: |
+        SET PATH=%PATH%;%USERPROFILE%\.cargo\bin;
+        rustup install nightly
+        rustup default nightly
+      displayName: 'Setting nightly'
+
+    - script: |
+        SET PATH=%PATH%;%USERPROFILE%\.cargo\bin;
+        rustup component add rustfmt-preview
+        rustup component add clippy-preview --toolchain=nightly
+      displayName: 'installing Cargo components'
+
+    - script: |
+        SET PATH=%PATH%;%USERPROFILE%\.cargo\bin;
+        cargo fmt --all -- --check
+      displayName: 'Cargo fmt'
+
+    - script: |
+        SET PATH=%PATH%;%USERPROFILE%\.cargo\bin;
+        cargo clippy --all -- -D clippy::pedantic -A clippy::non-ascii-literal
+      displayName: 'Cargo clippy'
+
+    - script: |
+        SET PATH=%PATH%;%USERPROFILE%\.cargo\bin;
+        cargo build --release
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      displayName: 'Cargo build'
+    
+    - task: ArchiveFiles@2
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      displayName: 'Archive target/release'
+      inputs:
+        rootFolderOrFile: 'target/release'
+        archiveFile: ${{parameters.artifactName}}
+
+    - task: marcelo-formentao.github-tools.github-release-publish-task.GitHubReleasePublish@1
+      condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+      displayName: 'Release'
+      inputs:
+        githubEndpoint: rob
+        githubRepository: ${{parameters.repoName}}
+        githubTag: '$(Build.BuildNumber)'
+        githubReleaseTitle: '$(Build.BuildNumber)'
+        githubReleaseDraft: false
+        githubReleaseAsset: ${{parameters.artifactName}}
+        githubReuseDraftOnly: false
